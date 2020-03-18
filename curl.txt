@@ -1,0 +1,18 @@
+# Acceso como Guest
+curl -X GET 'http://simplerest.lan/api/products?folder=6'
+
+# Login
+curl -d '{ "email": "nano@", "password": "gogogo2k" }' -X POST 'http://simplerest.lan/auth/login'
+
+Respuesta es algo como:
+
+{
+    "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImlhdCI6MTU3MjY0OTk5NiwiZXhwIjoxNTcyNzA5OTk2LCJ1aWQiOiI5MCIsInJvbGVzIjpbImJhc2ljIl19.ygWTw_NIX43eP6jhfmOh16C1UEjvZQHETrm71wjQr64",
+    "token_type": "bearer",
+    "expires_in": 60000,
+    "refresh_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImlhdCI6MTU3MjY0OTk5NiwiZXhwIjoxODg4MDA5OTk2LCJ1aWQiOiI5MCIsInJvbGVzIjpbImJhc2ljIl19.X7ntUCSpd9jaCrllml7lUzOAcyG1-HPtROwuwEj35ns"
+}
+
+
+Más de Curl
+https://hackernoon.com/how-to-easily-use-curl-for-http-requests-db3249c5d4e6

@@ -1,0 +1,28 @@
+{
+    "name": "felipe/simplerest",
+    "description": "API Rest framework for PHP",
+    "type": "project",
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "boctulus",
+            "email": "boctulus@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.2.0",
+        "byjg/jwt-session": "2.0.*",
+        "google/apiclient": "^2.0",
+        "facebook/graph-sdk": "^5.7",
+        "phpmailer/phpmailer": "^6.1",
+        "guzzlehttp/guzzle": "~6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "simplerest\\": "app/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "8"
+    }
+}

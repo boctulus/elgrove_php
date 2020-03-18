@@ -1,0 +1,437 @@
+# TODO
+
+- Proveer en el modelo un método para ejecutar raw queries como en Laravel o CI
+
+https://fideloper.com/laravel-raw-queries
+
+
+- Modificar Request::header() para que obtenga de forma "case-insensitive" los headers de apache_request_headers()
+
+Convertir a minúsculas como hace NodeJs.
+
+https://stackoverflow.com/questions/5258977/are-http-headers-case-sensitive
+
+- En el config.php colocar:
+
+'JWT_AUTH_CORS_ENABLE' => true
+
+
+- Hacer el segmento /api opcional
+
+- Incluir sub-Resources, ej:
+
+/api/v1/users?include=rol
+
+protected $availableIncludes = [
+      'role'
+];
+
+public function includeRole(User $user)
+{
+      return $this->item($user->role, App::make(RoleTransformer::class));
+}
+
+When including a sub-resource, we can nest relations by using the a dot notation. Let’s say every role has a list of permissions stored in a separate table and we wanted to list users with their role and permissions. We can do it like this: include=role.permissions.
+
+Sometimes, we are required to include some necessary relations by default, like an address relation for example. We can do that by using the $defaultIncludes property inside the transformer:
+
+protected $defaultIncludes = [
+        'address'
+];
+
+Los include parameters se pueden parametrizar (o sea pueden aceptar parámetros), ej:
+
+public function includeUsers(Role $role, ParamBag $paramBag)
+{
+    list($orderCol, $orderBy) = $paramBag->get('order') ?: ['created_at', 'desc'];
+
+    $users = $role->users()->orderBy($orderCol, $orderBy)->get();
+
+    return $this->collection($users, App::make(UserTransformer::class));
+}
+
+
+Leer en detalle:
+https://www.sitepoint.com/php-fractal-make-your-apis-json-pretty-always/
+
+
+- Usar métodos encadenados para simplificar la creación de reglas que actualmente se hace escribiendo directamente el array $rules en el modelo.
+
+protected $rules = [
+        'fullname' 	  => ['min'=>3, 'max'=>40],
+        'username'	  => ['min'=>2, 'max'=>15, 'type' => 'regex:/^[a-zA-Z0-9_]+$/'], 
+		    'email'     	=> ['type'=>'email'],
+               
+]
+
+Podría en su lugar......
+
+function __construct(){
+  // ..
+
+  $this->rules = new Validator()
+                  ->field('fullname)->min(3)->max(40)->string()
+                  ->field('username')->min(2)->max(50)->regex('/^[a-zA-Z0-9_]+$/')
+                  ->field('email')->email()
+                  ...
+                  ->getRules();
+}
+
+Obviamente que los tipos string e int siguen siendo opcionales si ya están definidos en el SCHEMA.
+
+ Usar un campo folder_id en cada tabla en la que pretendo utilizar folders y usar éste en vez de la combinación entre el user_ud y el nombre del "workspace" como identificador de carpeta.
+
+Objetivo: poder crear recursos de nuestra propiedad en carpetas ajenas donde lógicamente poseemos permisos de lectura y escritura.
+
+- Chequear:
+
+SI está en un folder y no es de mi propiedad ni soy el admin ni tengo permiso de escritura =>
+NO debebería poder restaurar el registro.***
+
+- Revisar implementación de first() y hacer findOrFail() y firstOrFail()
+
+Más
+https://stackoverflow.com/a/33027466/980631
+
+- Documentar en Git como en 
+
+https://github.com/robsonvn/laravel-couchdb
+
+- Permitir setear nivel de compresion (1 a 6)
+
+	ini_set('zlib.output_compression_level', 4);
+
+
+- Subconsultas:
+
+  > En el SELECT 
+  > En el FROM -> funciona pero no acepta parámetros para la subconsulta y la forma de ver la consulta es mediante getLastPrecompiledQuery() ya que getQueryLog() queda apuntando a la consulta "hija".
+  > En el WHERE -> ok
+  > En el HAVING 
+
+  > UNION > funciona pero getQueryLog() no muestra los bindings de la subconsulta
+
+Subconsultas en el SELECT puede implementarse con selectRaw() y en el HAVING con havingRaw()
+
+Leer
+https://www.tutorialesprogramacionya.com/sqlserverya/temarios/descripcion.php?inicio=75&cod=98&punto=92
+https://docs.aws.amazon.com/es_es/redshift/latest/dg/r_Subquery_examples.html
+https://www.mundoracle.com/subconsultas.html?Pg=sql_plsql_6.htm
+  
+- Generador de modelos, controladores y apis (resource controllers) como en Laravel:
+
+Ejemplo:
+
+  php index.php make -mca Products
+
+-m model
+-c controller 
+-a api controller
+
+https://stackoverflow.com/questions/43187735/laravel-5-4-create-model-controller-and-migration-in-single-artisan-command
+
+
+- Vista de correo enviado para cambio de contraseña o confirmación de correo.
+
+- Usar archivos .env 
+
+  'mysql' => [
+      'driver'    => 'mysql',
+      'host'      => env('DB_HOST', 'localhost'),
+      'database'  => env('DB_DATABASE', 'forge'),
+      'username'  => env('DB_USERNAME', 'forge'),
+      'password'  => env('DB_PASSWORD', ''),
+      'charset'   => 'utf8',
+      'collation' => 'utf8_unicode_ci',
+      'prefix'    => '',
+      'strict'    => false,
+  ],
+
+Más
+https://scotch.io/tutorials/understanding-laravel-environment-variables
+https://medium.com/@hfally/how-to-create-an-environment-variable-file-like-laravel-symphonys-env-37c20fc23e72
+https://laravel.com/docs/5.7/configuration
+https://medium.com/@sagarmaheshwary31/laravel-5-8-from-scratch-config-env-migrations-and-todos-crud-7c771bcac802
+https://github.com/vlucas/phpdotenv
+
+- Implementar un paginador con enlaces a nivel de API Rest como:
+
+https://laravel.com/docs/5.8/pagination
+
+- Usar templates para los correos 
+
+- Implementar "where anidados" como en Laravel con callbacks
+
+https://stackoverflow.com/a/25129805/980631
+
+- Debe haber orJoin() como orWhere() y orHaving() 
+
+https://stackoverflow.com/a/36074909/980631
+https://laravel.com/docs/5.8/queries#where-exists-clauses
+
+
+- Considerar usar 'seek method' en vez de OFFSET como método de optimización de queries
+
+Ejemplo (API de Facebook)
+
+"paging": {
+"cursors": {
+  "after": "MTAxNTExOTQ1MjAwNzI5NDE=",
+  "before": "NDMyNzQyODI3OTQw"
+},
+"previous": "https://graph.facebook.com/me/albums?limit=25&before=NDMyNzQyODI3OTQw"
+"next": "https://graph.facebook.com/me/albums?limit=25&after=MTAxNTExOTQ1MjAwNzI5NDE="
+}
+
+https://blog.octo.com/design-a-rest-api/  # -> Paging
+https://www.eversql.com/faster-pagination-in-mysql-why-order-by-with-limit-and-offset-is-slow/
+
+- Máscara de campos y valores accesibles por un usuario según su rol o... hidden y filled con roles 
+a nivel de API
+
+protected $hidden = [
+                      'password',
+                      'active' => ['guest', 'registered', 'basic'] 
+]
+
+- Restricción de valores 
+
+// UserRole
+protected $constraint = [
+                      'role_id' => [
+                                      'gerente' => [1, 2, 3]
+                                   ] 
+];
+
+<-- de los roles autorizados a acceder a UserRole el gerente posee una restricción que le permite solo crear o actualizar roles dentro del conjunto [1,2,3] no pudiendo así por ejemplo otorgar un permiso de admin (100)
+
+Justificación: un caso de uso sería que un usuario con rol de gerente por ejemplo otorgar roles a usuarios pero nunca pueda ser un rol igual o superior al de gerente. La solución es restringir los valores que puede tomar el rol_id  
+
+- No tiene sentido que un usuario pueda registrarse sin correo *excepto* venga de Facebook en cuyo caso me guardo el fb_id
+
+- Eventos: 
+ 
+  * al verificar el correo poder por ejemplo agregar el rol usuario 'regular'
+
+- Arreglar lo que pasa si un usuario es borrado con soft delete (warnings)
+
+- Posiblemente implementar "Seek pagination" como en Instagram
+
+{
+    ...
+    "pagination": {
+        "next_url": "https://api.instagram.com/v1/self/media/recent?access_token=fb2e77d.47a0479900504cb3ab4a1f626d174d2d&max_id=13872296",
+        "next_max_id": "13872296"
+    }
+}
+
+Más
+https://nordicapis.com/everything-you-need-to-know-about-api-pagination/
+https://www.moesif.com/blog/technical/api-design/REST-API-Design-Filtering-Sorting-and-Pagination/#
+
+
+- Ante una excepción del modelo imprimir la consulta SQL
+
+- Generar fallos intencionalmente en las URLs para ver si se puede mejorar el reporte de errores (hacerlos más comprensibles)
+
+- Pruebas unitarias
+
+ver 
+https://api.akeneo.com/documentation/filter.html
+https://www.ibm.com/support/knowledgecenter/fi/SS42VS_7.2.6/com.ibm.qradar.doc/c_rest_api_filtering.html
+http://lj.platformatyourservice.com/wiki/REST_API:Filter_Expressions_in_REST_APIs
+https://www.ibm.com/support/knowledgecenter/en/SS6KJL_8.6.4/FEB/ref_data_rest_api_list_filter.html
+
+
+- 'OR' operator
+
+  /api/people?q={{"$or": [{"name": "Jane"}, {"name": "Donald"}]}}
+
+Más
+https://restdb.io/docs/querying-with-the-api
+
+- Traer colecciones de recursos relacioandos
+
+  GET  /customers/5/orders
+
+<-- lista de órdenes de compra para el cliente con id=5
+
+o...
+
+  GET /customers/1/orders/99/products
+
+<-- productos de la orden 99 del cliente 1
+
+- Un usuario que cambia la contraseña sigue verificado? debería poder volverse read-only el correo o bien al cambiar el correo ser obligario verificarlo de nuevo.
+
+- ACL, eventos beforeCheckAccess y afterCheckAccess ?
+
+https://docs.phalcon.io/3.4/en/acl
+
+- Implementar X-Rate-Limit-Limit, X-Rate-Limit-Remaining y X-Rate-Limit-Reset
+
+Se deben poder especificar para cada endpoint
+
+https://github.com/dingo/api/wiki/Rate-Limiting
+https://developer.twitter.com/en/docs/basics/rate-limiting
+https://stackoverflow.com/questions/16022624/examples-of-http-api-rate-limiting-http-response-headers
+https://apisyouwonthate.com/blog/what-is-api-rate-limiting-all-about
+https://developer.github.com/v3/rate_limit/
+https://developer.vimeo.com/guidelines/rate-limiting
+https://support.exactonline.com/community/s/knowledge-base#All-All-HNO-Simulation-gen-apilimits
+https://stackoverflow.com/a/49611482/980631
+
+- Implementar front con DataTables o bien VueJs
+
+- Swagger for Documentation
+
+Swagger is a widely-used tool to document REST APIs that provides a way to explore the use of a specific API, therefore allowing developers to understand the underlying semantic behavior. It’s a declarative way of adding documentation using annotations which further generates a JSON describing APIs and their usage.
+
+- Al generar los modelos..... modificar la tabla correspondiente agregando el campo `deleted_at` y `belongs_to` ? 
+
+- Ofrecer la forma de filtrado compatible con JSON:API
+
+GET /employees?filter[state]=internal&filter[title]=senior
+GET /employees?filter[id]=1,2
+
+equivalente a...
+
+GET /employees?state=internal&title=senior
+GET /employees?id=1,2
+
+- En vez de devolver solo un mensaje de error y un status, ofrecer tambien un código de error
+
+// 400 Bad Request
+{
+  "errors": [
+    {
+      "status": 400,
+      "detail": "Invalid state. Valid values are 'internal' or 'external'",
+      "code": 352,
+      "links": {
+        "about": "http://www.domain.com/rest/errorcode/352"
+      }
+    }
+  ]
+}
+
+Más 
+https://jsonapi.org/format/#error-objects
+https://phauer.com/2015/restful-api-design-best-practices/
+
+
+- Soportar formatos JSON, XML,  YAML, CSV ...
+
+HTTP/1.1 200 OK
+Content-Type: application/xml
+Content-Length: ...
+
+<?xml version="1.0"?>
+<account>
+    <account_number>12345</account_number>
+    <balance currency="usd">100.00</balance>
+    <link rel="deposit" href="/accounts/12345/deposit" />
+    <link rel="withdraw" href="/accounts/12345/withdraw" /> 
+    <link rel="transfer" href="/accounts/12345/transfer" />
+    <link rel="close" href="/accounts/12345/close" />
+</account>
+ 
+- Simplificar la forma de crear la conexion a la DB como en Laravel Lummen:
+https://lumen.laravel.com/docs/6.x/database
+
+- Implementar mi data-validator
+- Generar Modelos con sus schemas a partir de la DB como con CRUDO usando un comando.
+- Form de registro (front)
+- Paginador (front)
+- Controles más complejos como checkbox, radio, combobox
+- Middlewares
+- Migrations, seeders,...
+- Sanitización a nivel de urls, FILTER_SANITIZE_URL
+
+https://www.w3schools.com/php/php_filter.asp
+
+- Sanitización a nivel de base de datos
+
+- Upload de archivos, devolver:
+
+{
+  "id": "20301",
+  "url": "http://simplerest.lan/api/attachments/:user_id/xxxxxxxxxxxxxxxx.png"   
+}
+
+- Upload de archivos con Content-type multipart/form-data (o application/x-www-form-urlencoded)
+https://stackoverflow.com/a/4083908/980631
+
+Si se genera un error, detallar según:
+https://www.php.net/manual/en/features.file-upload.errors.php
+
+- Upload de Multiples archivos en batch 
+
+https://doc.nuxeo.com/nxdoc/batch-upload-endpoint
+
+- Aceptar distintos "Accept" y "Content-type" y responder acordemente
+
+- Sacar ideas de: https://dev.targetprocess.com/docs/custom-calculations
+
+* "additional details embedded"
+* Overriding the HTTP method
+* Rate limiting (quotas)
+* Errors
+
+- Securitizar almacenamiento de tokens -- en cookies?
+
+https://stormpath.com/blog/where-to-store-your-jwts-cookies-vs-html5-web-storage
+https://medium.com/@jcbaey/authentication-in-spa-reactjs-and-vuejs-the-right-way-e4a9ac5cd9a3
+https://dev.to/rdegges/please-stop-using-local-storage-1i04
+
+
+- Donde almacenar con seguridad Refresh tokens !!!!!
+
+https://stackoverflow.com/questions/48690373/where-to-store-refresh-token-safely
+https://github.com/IdentityServer/IdentityServer3/issues/2039
+
+- Custom Actions (Nested Resources)
+
+
+- Leer atentamente
+https://blog.octo.com/design-a-rest-api/
+https://docs.microsoft.com/es-es/azure/architecture/best-practices/api-design  !!!
+https://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api
+https://phauer.com/2015/restful-api-design-best-practices/
+https://www.paradigmadigital.com/dev/oauth-2-0-equilibrio-y-usabilidad-en-la-securizacion-de-apis/
+https://medium.com/crowdbotics/how-to-write-an-api-in-3-lines-of-code-with-django-rest-framework-59b0971edfa4
+https://idratherbewriting.com/learnapidoc/pubapis_openapi_tutorial_overview.html
+https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md
+https://hackernoon.com/designing-rest-api-with-open-api-specification-oas-v2-0-v3-0-using-swagger-11dd4ef8cea6
+
+- Revisar 
+
+https://stackoverflow.com/questions/36514344/how-to-make-use-of-session-in-rest-api/36515140
+
+- Incluir displayName y username en el Payload:
+
+{
+    "iss": "stackoverflow",
+    "sub": "joe",
+    "aud": ["all"],
+    "iat": 1300819370,
+    "exp": 1300819380,
+    "jti": "3F2504E0-4F89-11D3-9A0C-0305E82C3301"
+    "context": {
+        "user": {
+            "key": "joe",
+            "displayName": "Joe Smith"
+        },
+        "roles":["admin","finaluser"]
+    }
+}
+
+iss (issuer): identifies the principal that issued the JWT.
+sub (subject): identifies the principal that is the subject of the JWT. Must be unique
+aud (audience): identifies the recipients that the JWT is intended for (array of strings/uri)
+exp (expiration time): identifies the expiration time (UTC Unix) after which you must no longer accept this token. It should be after the issued-at time.
+nbf(not before): identifies the UTC Unix time before which the JWT must not be accepted
+iat (issued at): identifies the UTC Unix time at which the JWT was issued
+jti (JWT ID): provides a unique identifier for the JWT.
+
+https://stackoverflow.com/questions/38897514/what-to-store-in-a-jwt

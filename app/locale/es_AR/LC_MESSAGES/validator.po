@@ -1,0 +1,87 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Codegroove.net
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid   ""
+msgstr  "Project-Id-Version: Codegroove.net Example Translations 0.0.1\n"
+        "Report-Msgid-Bugs-To: vmc@codegroove.net\n"
+        "POT-Creation-Date: 2010-05-28 06:18-0500\n"
+        "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+        "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+        "Language-Team: LANGUAGE <LL@li.org>\n"
+        "MIME-Version: 1.0\n"
+        "Content-Type: text/plain; charset=UTF-8\n"
+        "Content-Transfer-Encoding: 8bit\n"
+
+#, php-format
+
+msgid   "Data validation error"
+msgstr  "Error de validación"
+
+msgid   "No data"
+msgstr  "No se recibieron datos"
+
+msgid   "Data type is undefined"
+msgstr  "Tipo de datos indefinido"
+
+msgid   "%s is required"
+msgstr  "%s es requerido"
+
+msgid   "Field is required"
+msgstr  "El campo es requerido"
+
+msgid   "Invalid regular expression!"
+msgstr  "Expresión regilar inválida"
+
+msgid   "Invalid data type for %s"
+msgstr  "Tipo de dato inválido para %s"
+
+msgid   "No validation rules!"
+msgstr  "No hay reglas de validación!"
+
+msgid   "It's not a valid int"
+msgstr  "No es un número entero válido"
+
+msgid   "It's not a valid integer"
+msgstr  "No es un número entero válido"
+
+msgid   "It's not a number"
+msgstr  "No es un número válido"
+
+msgid   "It's not a valid decimal"
+msgstr  "No es un número decimal válido"
+
+msgid   "It's not a valid float"
+msgstr  "No es un número flotante válido"
+
+msgid   "It's not a valid double"
+msgstr  "No es un número de doble presición válido"
+
+msgid   "It's not a valid string"
+msgstr  "No es una cadena válida"
+
+msgid   "It's not a valid alpha"
+msgstr  "No se permiten números o símbolos"
+
+msgid   "It's not a valid notnum"
+msgstr  "No se admiten números"
+
+msgid   "It's not a valid email"
+msgstr  "El correo no es válido"
+
+msgid   "It's not a valid date"
+msgstr  "No es una fecha válida"
+
+msgid   "It's not a valid datetime"
+msgstr  "No es una fecha-hora válida"
+
+msgid   "It's not a valid time"
+msgstr  "No es una hora válida"
+
+msgid   "The maximum length is %d characters"
+msgstr  "La longitud máxima es de %d caracteres"
+
+msgid   "The minimum length is %d characters"
+msgstr  "La longitud mínima es de %d caracteres"

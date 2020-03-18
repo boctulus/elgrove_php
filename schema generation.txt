@@ -1,0 +1,41 @@
+Al agregar el campo:
+
+ALTER TABLE `permissions` ADD CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+---
+
+Al crearse todas las tablas......
+
+CREATE TABLE `permissions` (
+  `id` int(11) NOT NULL,
+  `table` varchar(80) COLLATE utf16_spanish_ci NOT NULL,
+  `can_create` tinyint(4) NOT NULL,
+  `can_read` tinyint(4) NOT NULL,
+  `can_update` tinyint(4) NOT NULL,
+  `can_delete` tinyint(4) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_spanish_ci;
+
+
+--
+-- Indices de la tabla `permissions`
+--
+ALTER TABLE `permissions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
+  
+--
+-- AUTO_INCREMENT de la tabla `permissions`
+--
+ALTER TABLE `permissions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  
+  
+--
+-- Filtros para la tabla `permissions`
+--
+ALTER TABLE `permissions`
+  ADD CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);

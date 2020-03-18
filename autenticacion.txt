@@ -1,0 +1,22 @@
+Type of Authentication/Authorization mechanism:
+
+	JWT + LocalStorage
+
+	JWT token in http-only cookie + CSRF token in localStorage
+
+	http-only Session Cookies
+
+	Passport.js
+
+	Oauth2.0 + Jwt
+
+	jwt in memory, refresh token in local storage/cookie
+
+	JWT + LocalStorage + http-only Session cookies
+
+	Firebase
+
+	JWT + IndexedDB
+
+
+https://www.facebook.com/groups/359999434098189/permalink/2416101301821315/

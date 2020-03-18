@@ -1,0 +1,30 @@
+OK:
+
+https://simplerest.mapapulque.ro/dumb/test?from_email=admin@simplerest.mapapulque.ro&from_name=Pablo&to_email=boctulus@gmail.com&to_name=%27Boctulus%27&subject=Prueba&msg=El%20dia%20que%20me%20quieras
+
+
+	'Host' => 'smtp.easyname.com',
+	'Username' => '162997mail6',
+	'Password' => 'Hvr0tf9Is#',
+	'Port' => 587,
+    'SMTPAuth' => true,
+	'SMTPSecure' => 'ssl',
+	'SMTPDebug' => 4,
+	'CharSet' => 'UTF-8',
+	'Debugoutput' => 'html',
+	'SMTPSecure' => false
+
+
+---
+
+	'Host' => 'smtp.gmail.com',
+	'Username' => 'boctulus@gmail.com',
+	'Password' => 'boctulfelipitoTEamoMUCHO2K!',
+	'Port' => 465,
+	'Secure' => 'ssl',
+	'Kim_domain' => '127.0.0.1',
+	'SMTPDebug' => 2,
+	'CharSet' => 'UTF-8',
+	'Debugoutput' => 'html',
+	'SMTPSecure' => false,
+	'SMTPAutoTLS' => false

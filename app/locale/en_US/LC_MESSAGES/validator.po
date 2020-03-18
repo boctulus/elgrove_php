@@ -1,0 +1,87 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Codegroove.net
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid   ""
+msgstr  "Project-Id-Version: Codegroove.net Example Translations 0.0.1\n"
+        "Report-Msgid-Bugs-To: vmc@codegroove.net\n"
+        "POT-Creation-Date: 2010-05-28 06:18-0500\n"
+        "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+        "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+        "Language-Team: LANGUAGE <LL@li.org>\n"
+        "MIME-Version: 1.0\n"
+        "Content-Type: text/plain; charset=UTF-8\n"
+        "Content-Transfer-Encoding: 8bit\n"
+
+#, php-format
+
+msgid   "Data validation error"
+msgstr  ""
+
+msgid   "No data"
+msgstr  ""
+
+msgid   "Data type is undefined"
+msgstr  ""
+
+msgid   "%s is required"
+msgstr  ""
+
+msgid   "Field is required"
+msgstr  ""
+
+msgid   "Invalid regular expression!"
+msgstr  ""
+
+msgid   "Invalid data type for %s"
+msgstr  ""
+
+msgid   "No validation rules!"
+msgstr  ""
+
+msgid   "It's not a valid int"
+msgstr  "It's not a valid integer"
+
+msgid   "It's not a valid integer"
+msgstr  ""
+
+msgid   "It's not a number"
+msgstr  ""
+
+msgid   "It's not a valid decimal"
+msgstr  "It's not a valid decimal number"
+
+msgid   "It's not a valid float"
+msgstr  "It's not a valid float number"
+
+msgid   "It's not a valid double"
+msgstr  "It's not a valid double precision number"
+
+msgid   "It's not a valid string"
+msgstr  ""
+
+msgid   "It's not a valid alpha"
+msgstr  "Numbers or symbols are not allowed"
+
+msgid   "It's not a valid notnum"
+msgstr  "Numbers are not allowed"
+
+msgid   "It's not a valid email"
+msgstr  ""
+
+msgid   "It's not a valid date"
+msgstr  "No es una fecha válida"
+
+msgid   "It's not a valid datetime"
+msgstr  ""
+
+msgid   "It's not a valid time"
+msgstr  ""
+
+msgid   "The maximum length is %d characters"
+msgstr  ""
+
+msgid   "The minimum length is %d characters"
+msgstr  ""
