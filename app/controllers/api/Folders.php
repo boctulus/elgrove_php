@@ -8,8 +8,7 @@ class Folders extends MyApiController
 {     
     protected $scope = [
         'guest'   => [ ],  
-        'basic'   => ['read'],
-        'regular' => ['read', 'write']
+        'copropietario'   => ['read']
     ];
 
     function __construct()

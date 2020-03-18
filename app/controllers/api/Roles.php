@@ -9,10 +9,9 @@ use simplerest\models\RolesModel;
 class Roles extends MyApiController
 {
     protected $scope = [
-        'guest'      => [], 
-        'registered' => ['read'],
-        'basic'      => ['read'],
-        'regular'    => ['read']
+        'guest'         => [], 
+        'registered'    => ['read'],
+        'copropietario' => ['read']
     ];
 
     function __construct()

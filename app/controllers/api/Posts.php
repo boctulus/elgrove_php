@@ -4,7 +4,7 @@ namespace simplerest\controllers\api;
 
 use simplerest\controllers\MyApiController; 
 
-class Messages extends MyApiController
+class Posts extends MyApiController
 { 
     //static protected $folder_field = 'workspace';
     //static protected $owned = false;
@@ -12,9 +12,9 @@ class Messages extends MyApiController
 
     function __construct()
     {       
-        $this->scope['guest']      = [];
-        $this->scope['registered'] = [];
-        $this->scope['copropietario'] = [];
+        $this->scope['guest']      = ['read'];
+        $this->scope['registered'] = ['read'];
+        $this->scope['copropietario'] = ['read'];
         parent::__construct();
     }
 
