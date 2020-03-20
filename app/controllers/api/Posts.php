@@ -8,7 +8,7 @@ class Posts extends MyApiController
 { 
     //static protected $folder_field = 'workspace';
     //static protected $owned = false;
-    //static protected $guest_access = true;
+    static protected $guest_access = true;
 
     function __construct()
     {       

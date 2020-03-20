@@ -38,6 +38,9 @@ abstract class ApiController extends ResourceController
 
     function __construct(array $headers = [], IAuth $auth_object = null) 
     {        
+        //if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
+        //    return;
+        
         parent::__construct();
 
         $this->config = include CONFIG_PATH . 'config.php';
@@ -110,8 +113,10 @@ abstract class ApiController extends ResourceController
         //var_export($this->callable);
         //exit;
 
-        if (empty($this->callable))
-            Factory::response()->sendError('You are not authorized',403);
+        if (empty($this->callable)){
+            Factory::response()->sendError('You are not authorized!',403);
+        }
+            
 
         $this->callable = array_merge($this->callable,['head','options']);
 
@@ -136,6 +141,14 @@ abstract class ApiController extends ResourceController
      * @return void
      */
     private function setheaders(array $headers = []) {
+
+        header('Access-Control-Allow-Credentials: True');
+        header('Access-Control-Allow-Headers: Origin,Content-Type,X-Auth-Token,AccountKey,X-requested-with,Authorization,Accept, Client-Security-Token,Host,Date,Cookie,Cookie2'); 
+        header('Access-Control-Allow-Methods: GET,POST,PUT,PATCH,POST,DELETE,OPTIONS'); 
+        header('Access-Control-Allow-Origin: *');
+        header('Content-Type: application/json; charset=UTF-8');
+
+        /*
         $headers = array_merge($this->default_headers, $headers);     
 
         foreach ($headers as $k => $val){
@@ -144,6 +157,7 @@ abstract class ApiController extends ResourceController
             
             header("${k}:$val");
         }
+        */
     }
 
     /**
@@ -670,8 +684,9 @@ abstract class ApiController extends ResourceController
                     $rows = $instance->get();
                 
 
+                //    
                 ///Debug::dd($instance->getLastPrecompiledQuery());
-            
+                
 
                 $res = Factory::response()->setPretty($pretty)->code(200);
 

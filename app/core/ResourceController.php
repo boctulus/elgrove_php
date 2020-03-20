@@ -17,6 +17,10 @@ abstract class ResourceController extends Controller
 
     function __construct()
     {
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+            Factory::response()->sendCode(200);
+        }
+
         if (Factory::request()->header('Authorization') == NULL){
             $this->uid = null;
             $this->is_admin = false;

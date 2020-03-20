@@ -20,8 +20,8 @@ class AuthController extends Controller implements IAuth
 {
     function __construct()
     { 
-        header('Access-Control-Allow-Credentials: true');
-        header('Access-Control-Allow-headers: AccountKey,x-requested-with, Content-Type, origin, authorization, accept, client-security-token, host, date, cookie, cookie2'); 
+        header('Access-Control-Allow-Credentials: True');
+        header('Access-Control-Allow-Headers: Origin,Content-Type,X-Auth-Token,AccountKey,X-requested-with,Authorization,Accept, Client-Security-Token,Host,Date,Cookie,Cookie2'); 
         header('Access-Control-Allow-Methods: POST,OPTIONS'); 
         header('Access-Control-Allow-Origin: *');
         header('Content-Type: application/json; charset=UTF-8');
@@ -61,19 +61,17 @@ class AuthController extends Controller implements IAuth
 
     function login()
     {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST')
+        if (!in_array($_SERVER['REQUEST_METHOD'], ['POST','OPTIONS']))
             Factory::response()->sendError('Incorrect verb ('.$_SERVER['REQUEST_METHOD'].'), expecting POST',405);
 
         $data  = Factory::request()->getBody(false);
 
         if ($data == null)
-            Factory::response()->sendError('Invalid JSON',400);
-        
+            return;
+            
         $email = $data->email ?? null;
         $username = $data->username ?? null;  
-        $password = $data->password ?? null;     
-
-        //print_r($data);       
+        $password = $data->password ?? null;         
         
         if (empty($email) && empty($username) ){
             Factory::response()->sendError('email or username are required',400);
@@ -103,6 +101,8 @@ class AuthController extends Controller implements IAuth
             $uid = (int) $row['id'];
             $rows = DB::table('user_roles')->setFetchMode('ASSOC')->where(['belongs_to', $uid])->select(['role_id as role'])->get();	
 
+            //Debug::dd(DB::getQueryLog());
+
             $roles = [];
             if (count($rows) != 0){            
                 $r = new RolesModel();
@@ -114,7 +114,8 @@ class AuthController extends Controller implements IAuth
             
             $_permissions = DB::table('permissions')->setFetchMode('ASSOC')->select(['tb', 'can_create as c', 'can_read as r', 'can_update as u', 'can_delete as d'])->where(['user_id' => $uid])->get();
 
-            //print_r($_permissions);
+            //print_r($rows);
+            //exit; //
 
             $perms = [];
             foreach ((array) $_permissions as $p){
@@ -140,8 +141,9 @@ class AuthController extends Controller implements IAuth
                                         'access_token'=> $access,
                                         'token_type' => 'bearer', 
                                         'expires_in' => $this->config['access_token']['expiration_time'],
-                                        'refresh_token' => $refresh    
-                                        // 'scope' => 'read write'
+                                        'refresh_token' => $refresh,   
+                                        'roles' => $roles,
+                                        'uid' => $uid
                                         ]);
           
         } catch (InvalidValidationException $e) { 
@@ -158,7 +160,7 @@ class AuthController extends Controller implements IAuth
     */	
     function token()
     {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST')
+        if (!in_array($_SERVER['REQUEST_METHOD'], ['POST','OPTIONS']))
             Factory::response()->sendError('Incorrect verb ('.$_SERVER['REQUEST_METHOD'].'), expecting POST',405);
 
         $request = Factory::request();
@@ -169,6 +171,8 @@ class AuthController extends Controller implements IAuth
         if (empty($auth)){
             Factory::response()->sendError('Authorization not found',400);
         }
+
+        //print_r($auth);
 
         try {                                      
             // refresh token
@@ -198,8 +202,9 @@ class AuthController extends Controller implements IAuth
             Factory::response()->send([ 
                                         'access_token'=> $access,
                                         'token_type' => 'bearer', 
-                                        'expires_in' => $this->config['access_token']['expiration_time']
-                                        // 'scope' => 'read write'
+                                        'expires_in' => $this->config['access_token']['expiration_time'],
+                                        'roles' => $payload->roles,
+                                        'uid' => $payload->uid
             ]);
             
         } catch (\Exception $e) {
@@ -209,7 +214,7 @@ class AuthController extends Controller implements IAuth
 
     function register()
     {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST')
+        if (!in_array($_SERVER['REQUEST_METHOD'], ['POST','OPTIONS']))
             Factory::response()->sendError('Incorrect verb ('.$_SERVER['REQUEST_METHOD'].'), expecting POST',405);
             
         try {
@@ -292,8 +297,9 @@ class AuthController extends Controller implements IAuth
                                         'access_token'=> $access,
                                         'token_type' => 'bearer', 
                                         'expires_in' => $this->config['access_token']['expiration_time'],
-                                        'refresh_token' => $refresh
-                                        // 'scope' => 'read write'
+                                        'refresh_token' => $refresh,
+                                        'roles' => [$role],
+                                        'uid' => $uid
                                       ]);
 
         } catch (InvalidValidationException $e) { 
@@ -310,12 +316,13 @@ class AuthController extends Controller implements IAuth
     @return mixed object | null
     */
     function check() {
-      
+        //file_put_contents('CHECK.txt', 'HTTP VERB: ' .  $_SERVER['REQUEST_METHOD']."\n", FILE_APPEND);
+
         $headers = Factory::request()->headers();
         $auth = $headers['Authorization'] ?? $headers['authorization'] ?? null;
-        
+
         if (empty($auth))
-            return NULL;  // prev was false (!)
+            return;
             
         list($jwt) = sscanf($auth, 'Bearer %s');
 
@@ -335,13 +342,16 @@ class AuthController extends Controller implements IAuth
 
                 if (empty($payload->uid))
                     Factory::response()->sendError('uid is needed',400);                
-               
+
                 if (empty($payload->roles)){
                     $payload->roles = ['registered'];
                 }
 
                 if ($payload->exp < time())
                     Factory::response()->sendError('Token expired',401);
+
+                //print_r($payload);
+                //exit; ///
 
                 return ($payload);
 

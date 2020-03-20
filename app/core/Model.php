@@ -1009,7 +1009,7 @@ class Model {
 
 		if (empty($this->group)){
 			if ($this->exec && $st->execute())
-				return $this->applyTransformer($this->applyOutputMutators($st->fetchAll(\PDO::FETCH_ASSOC)));
+				return $this->applyTransformer($this->applyOutputMutators($st->fetch(\PDO::FETCH_ASSOC)));
 			else
 				return false;	
 		}else{
@@ -1026,7 +1026,7 @@ class Model {
 
 		if (empty($this->group)){
 			if ($this->exec && $st->execute())
-				return $this->applyTransformer($this->applyOutputMutators($st->fetchAll(\PDO::FETCH_ASSOC)));
+				return $this->applyTransformer($this->applyOutputMutators($st->fetch(\PDO::FETCH_ASSOC)));
 			else
 				return false;	
 		}else{
@@ -1043,7 +1043,7 @@ class Model {
 
 		if (empty($this->group)){
 			if ($this->exec && $st->execute())
-				return $this->applyTransformer($this->applyOutputMutators($st->fetchAll(\PDO::FETCH_ASSOC)));
+				return $this->applyTransformer($this->applyOutputMutators($st->fetch(\PDO::FETCH_ASSOC)));
 			else
 				return false;	
 		}else{
@@ -1060,7 +1060,7 @@ class Model {
 
 		if (empty($this->group)){
 			if ($this->exec && $st->execute())
-				return $this->applyTransformer($this->applyOutputMutators($st->fetchAll(\PDO::FETCH_ASSOC)));
+				return $this->applyTransformer($this->applyOutputMutators($st->fetch(\PDO::FETCH_ASSOC)));
 			else
 				return false;	
 		}else{
@@ -1076,14 +1076,14 @@ class Model {
 		$st = $this->bind($q);
 
 		if (empty($this->group)){
-			if ($this->exec && $st->execute())
-				return $this->applyTransformer($this->applyOutputMutators($st->fetchAll(\PDO::FETCH_ASSOC)));
-			else
+			if ($this->exec && $st->execute()){
+				return $this->applyTransformer($this->applyOutputMutators($st->fetch(\PDO::FETCH_ASSOC)));
+			}else
 				return false;	
 		}else{
-			if ($this->exec && $st->execute())
+			if ($this->exec && $st->execute()){
 				return $this->applyTransformer($this->applyOutputMutators($st->fetchAll(\PDO::FETCH_ASSOC)));
-			else
+			}else
 				return false;
 		}	
 	}

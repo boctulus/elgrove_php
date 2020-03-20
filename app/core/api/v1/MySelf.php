@@ -13,19 +13,28 @@ use simplerest\libs\Validator;
 use simplerest\models\RolesModel;
 use simplerest\core\exceptions\InvalidValidationException;
 
-class MySelf extends Controller
+class MySelf extends Controller 
 { 
     protected $modelName = 'usersModel';
     
     protected $default_headers = [
-        'access-control-allow-Methods' => 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-        'access-control-allow-credentials' => 'true',
-        'access-control-allow-headers' => 'AccountKey,x-requested-with, Content-Type, origin, authorization, accept, client-security-token, host, date, cookie, cookie2',
-        'content-type' => 'application/json; charset=UTF-8',
+        'Access-Control-Allow-Methods' => 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+        'Access-Control-Allow-Credentials' => 'true',
+        'Access-Control-Allow-Headers' => 'AccountKey,x-requested-with, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Host, Date, Cookie, Cookie2',
+        'Content-Type' => 'application/json; charset=UTF-8',
     ];
 
     function __construct(array $headers = []) 
-    {        
+    {       
+        file_put_contents('CHECK.txt', 'HTTP VERB: ' .  $_SERVER['REQUEST_METHOD']."\n", FILE_APPEND);
+        
+        //echo json_encode('OK!!!');
+        //exit;
+
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+            Factory::response()->sendCode(200);
+        }
+         
         $this->config = include CONFIG_PATH . 'config.php';
 
         $auth_object = new \simplerest\controllers\AuthController();
@@ -95,10 +104,18 @@ class MySelf extends Controller
         $this->callable = array_merge($this->callable,['head','options']);
 
         // headers
+        /*
         $verbos = array_merge($this->callable, ['options']);            
-        $headers = array_merge($headers, ['access-control-allow-Methods' => implode(',',array_map( function ($e){ return strtoupper($e); },$verbos)) ]);
+        $headers = array_merge($headers, ['Access-Control-Allow-Methods' => implode(',',array_map( function ($e){ return strtoupper($e); },$verbos)) ]);
         $this->setheaders($headers);
-        
+        */
+
+        header('Access-Control-Allow-Credentials: True');
+        header('Access-Control-Allow-Headers: Origin,Content-Type,X-Auth-Token,AccountKey,X-requested-with,Authorization,Accept, Client-Security-Token,Host,Date,Cookie,Cookie2'); 
+        header('Access-Control-Allow-Methods: GET,POST,PUT,PATCH,POST,DELETE,OPTIONS'); 
+        header('Access-Control-Allow-Origin: *');
+        header('Content-Type: application/json; charset=UTF-8');
+
     }
 
     
@@ -166,8 +183,7 @@ class MySelf extends Controller
      * @return void
      */
     function get(){
-        try {            
-
+          try {
             $conn = DB::getConnection();
 
             $model    = 'simplerest\\models\\'.$this->modelName;

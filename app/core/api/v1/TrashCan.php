@@ -286,11 +286,11 @@ class TrashCan extends MyApiController
                 if (!isset($query['pageSize'])) 
                     $query['pageSize'] = $page_size;
 
-                $count = (new $model($conn))->showDeleted()->where($_get)->count();
+                $count = (new $model($conn))->showDeleted()->where($_get)->count('*', 'count')['count'];
 
                 //var_export(['cond' => $_get]);
                 //var_export(['count' => $count]);
-
+                
                 $page_count = ceil($count / $limit);
 
                 if ($page == NULL)
