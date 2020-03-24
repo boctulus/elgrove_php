@@ -325,8 +325,9 @@ class AuthController extends Controller implements IAuth
         $headers = Factory::request()->headers();
         $auth = $headers['Authorization'] ?? $headers['authorization'] ?? null;
 
-        if (empty($auth))
-            return;
+        if (empty($auth)){
+            return;            
+        }
             
         list($jwt) = sscanf($auth, 'Bearer %s');
 

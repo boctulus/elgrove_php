@@ -15,8 +15,8 @@ class Response
     static protected $pretty;
     static protected $quit = true;
     static protected $paginator;
+    static protected $fake_status_codes = true; // send 200 instead
     static protected $options = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES;
-
 
 
     protected function __construct() { 
@@ -50,6 +50,22 @@ class Response
     {
         static::$headers[] = $header;
         return static::getInstance();
+    }
+
+    /**
+     * sendHeaders
+     *
+     * @param  mixed $headers
+     *
+     * @return void
+     */
+    private function sendHeaders(array $headers = []) {
+        foreach ($headers as $k => $val){
+            if (empty($val))
+                continue;
+            
+            header("${k}:$val");
+        }
     }
 
     function code(int $http_code, string $msg = NULL)
@@ -92,11 +108,12 @@ class Response
         if ($http_code == NULL)
           static::$http_code;
 
-        if ($http_code != NULL)
+        if ($http_code != NULL && !static::$fake_status_codes)
             header(trim('HTTP/'.static::$version.' '.$http_code.' '.static::$http_code_msg));
         
-        if (is_array($data) || is_object($data)){
+        //if (is_array($data) || is_object($data)){
             $arr = ['data' => $data, 
+                    'status_code' => $http_code,
                     'error' => '', 
                     'error_detail' => '' 
             ];
@@ -105,33 +122,48 @@ class Response
                 $arr['paginator'] = static::$paginator;
 
             $data = $this->encode($arr);
-        }            
+        //}            
 
         //if (Factory::request()->gzip() && strlen($data) > 1000){
         //    $this->addHeader('Content-Encoding: gzip');
         //    $this->zip($data. "\n");
         //}else
-            echo $data. "\n";
+        //    echo $data. "\n";
+
+        echo $data;    
 
         if (static::$quit)
             exit;  	
     }
 
     function sendCode(int $http_code){
-        http_response_code($http_code);
+        echo json_encode(['status_code' => $http_code]);
+          
+        if (!static::$fake_status_codes){    
+            http_response_code($http_code);
+        }    
 
         if (static::$quit)
             exit; 
     }
  
+    function sendOK(){
+        $this->send('OK', 200);
+    }
+
     // send as JSON
     function sendJson($data, int $http_code = NULL){
         $http_code = $http_code != NULL ? $http_code : static::$http_code;
         
-        if ($http_code != NULL)
+        if ($http_code != NULL && !static::$fake_status_codes)
             header(trim('HTTP/'.static::$version.' '.$http_code.' '.static::$http_code_msg));
        
-        $res =  $this->encode([ 'data' => $data, 'error' => '', 'error_detail' => '' ]). "\n"; 
+        $res =  $this->encode([ 
+                                'data' => $data, 
+                                'status_code' => $http_code,
+                                'error' => '', 
+                                'error_detail' => ''
+        ]). "\n"; 
         
         if (Factory::request()->gzip() && strlen($res) > 1000){
             $this->addHeader('Content-Encoding: gzip');
@@ -161,11 +193,15 @@ class Response
             else
                 $http_code = 500;
   
-        if ($http_code != NULL)
+        if ($http_code != NULL && !static::$fake_status_codes)
             header(trim('HTTP/'.static::$version.' '.$http_code.' '.static::$http_code_msg));
 
         
-        $res =  $this->encode(['error' => $msg_error, 'error_detail' => $error_detail], $http_code) . "\n";
+        $res =  $this->encode([ 
+                                'status_code' => $http_code,
+                                'error' => $msg_error,
+                                'error_detail' => $error_detail
+        ], $http_code) . "\n";
         
         if (Factory::request()->gzip() && strlen($res) > 1000){
             $this->addHeader('Content-Encoding: gzip');

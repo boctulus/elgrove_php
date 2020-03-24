@@ -35,11 +35,6 @@ abstract class ApiController extends ResourceController
     {   
         parent::__construct();
 
-        header('Access-Control-Allow-Origin: *');    
-        header('Access-Control-Allow-Headers: Authorization,Content-Type'); 
-        header('Access-Control-Allow-Credentials: True');        
-        header('Content-Type: application/json; charset=UTF-8');
-        
         $this->config = include CONFIG_PATH . 'config.php';
 
         if ($this->config['debug_mode'] == false)
@@ -61,7 +56,8 @@ abstract class ApiController extends ResourceController
             'write'  => ['post', 'put', 'patch', 'delete']
         ];           
 
-        //var_export($this->is_admin);
+        //var_export(['is_admin' => $this->is_admin]); ///
+        //exit;
 
         // y si ya se que es admin....
         if ($this->isAdmin()){
@@ -110,6 +106,10 @@ abstract class ApiController extends ResourceController
         //var_export($this->callable);
         //exit;
 
+
+        //echo json_encode($this->is_admin);
+        //exit;
+
         if (empty($this->callable)){
             Factory::response()->sendError('You are not authorized!',403);
         }
@@ -119,40 +119,12 @@ abstract class ApiController extends ResourceController
 
         // aditional headers
 
-        $headers = array_merge($headers, ['Access-Control-Allow-Methods' => implode(',',array_map( function ($e){ return strtoupper($e); },$this->callable )) ]);
-        $this->setheaders($headers);
+        //$headers = array_merge($headers, ['Access-Control-Allow-Methods' => implode(',',array_map( function ($e){   return strtoupper($e); },$this->callable )) ]);
+        //Factory::response()->sendHeaders(array_merge($this->default_headers, $headers));
     }
 
     static function get_owned(){
         return static::$owned;
-    }
-    
-    /**
-     * setheaders
-     * mover a Response *
-     *
-     * @param  mixed $headers
-     *
-     * @return void
-     */
-    private function setheaders(array $headers = []) {
-
-        header('Access-Control-Allow-Credentials: True');
-        header('Access-Control-Allow-Headers: Origin,Content-Type,X-Auth-Token,AccountKey,X-requested-with,Authorization,Accept, Client-Security-Token,Host,Date,Cookie,Cookie2'); 
-        header('Access-Control-Allow-Methods: GET,POST,PUT,PATCH,POST,DELETE,OPTIONS'); 
-        header('Access-Control-Allow-Origin: *');
-        header('Content-Type: application/json; charset=UTF-8');
-
-        /*
-        $headers = array_merge($this->default_headers, $headers);     
-
-        foreach ($headers as $k => $val){
-            if (empty($val))
-                continue;
-            
-            header("${k}:$val");
-        }
-        */
     }
 
     /**
@@ -808,6 +780,9 @@ abstract class ApiController extends ResourceController
     
     protected function modify($id = NULL, bool $put_mode = false)
     { 
+        //Factory::response()->send("OK");
+        ////
+
         if ($id == null)
             Factory::response()->sendError("Lacks id in request",400);
 

@@ -143,7 +143,7 @@ class FrontController
         // Only for API Rest
         if ($_params[0]=='api'){
             if (!in_array($method, $controller_obj->getCallable())){
-                Response::getInstance()->send("Not authorized for $controller:$method", 403);
+                Response::getInstance()->sendError("Not authorized for $controller:$method", 403);
             }
         }
 

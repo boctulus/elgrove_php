@@ -14,14 +14,21 @@ abstract class ResourceController extends Controller
     protected $roles;
     protected $uid;
     protected $is_admin;
+    
 
     function __construct()
-    {
+    {       
+        header('Access-Control-Allow-Headers: Authorization,Content-Type'); 
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Methods: GET,POST,DELETE,PUT,PATCH,HEAD,OPTIONS'); ;
+        header('Access-Control-Allow-Credentials: True');
+        header('Content-Type: application/json; charset=UTF-8'); 
+        
         if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-            Factory::response()->sendCode(200);
+            return;
         }
 
-        if (Factory::request()->header('Authorization') == NULL){
+        if (Factory::request()->header('Authorization') == NULL && Factory::request()->header('authorization') == NULL){
             $this->uid = null;
             $this->is_admin = false;
             $this->roles = ['guest'];
