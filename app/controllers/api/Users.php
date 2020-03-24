@@ -7,9 +7,10 @@ use simplerest\controllers\MyApiController;
 class Users extends MyApiController
 {
     //static protected $owned = false;
+	static protected $guest_access = true;
 
     protected $scope = [
-        'guest'         => [], 
+        'guest'         => ['read'], 
         'registered'    => ['read'],
         'copropietario' => ['read']
     ];

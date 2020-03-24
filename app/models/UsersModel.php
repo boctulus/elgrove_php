@@ -10,7 +10,7 @@ class UsersModel extends Model
 	protected $table_name = "users";
 	protected $id_name = 'id';
 	protected $not_fillable = ['confirmed_email', 'enabled'];
-	protected $nullable = ['name', 'enabled', 'email', 'confirmed_email'];
+	protected $nullable = ['enabled', 'email', 'confirmed_email'];
 	protected $hidden   = [	'password' ];
 
 	/*
@@ -31,6 +31,7 @@ class UsersModel extends Model
 
 	protected $rules = [
 		'enabled' 	=> ['type' => 'bool'],
+		'name'	=> ['min' => 2, 'max'=> 40],
 		'username'	=> ['min' => 2, 'max'=> 15, 'type' => 'regex:/^[a-zA-Z0-9_]+$/', 'messages' => ['type' => 'Invalid characters'] ], 
 	];
 

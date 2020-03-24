@@ -17,19 +17,12 @@ class MySelf extends Controller
 { 
     protected $modelName = 'usersModel';
     
-    protected $default_headers = [
-        'Access-Control-Allow-Methods' => 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-        'Access-Control-Allow-Credentials' => 'true',
-        'Access-Control-Allow-Headers' => 'AccountKey,x-requested-with, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Host, Date, Cookie, Cookie2',
-        'Content-Type' => 'application/json; charset=UTF-8',
-    ];
-
     function __construct(array $headers = []) 
-    {       
-        file_put_contents('CHECK.txt', 'HTTP VERB: ' .  $_SERVER['REQUEST_METHOD']."\n", FILE_APPEND);
-        
-        //echo json_encode('OK!!!');
-        //exit;
+    {   
+        header('Access-Control-Allow-Origin: *');    
+        header('Access-Control-Allow-Headers: Authorization,Content-Type'); 
+        header('Access-Control-Allow-Credentials: True');        
+        header('Content-Type: application/json; charset=UTF-8');
 
         if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
             Factory::response()->sendCode(200);
@@ -103,19 +96,10 @@ class MySelf extends Controller
 
         $this->callable = array_merge($this->callable,['head','options']);
 
-        // headers
-        /*
-        $verbos = array_merge($this->callable, ['options']);            
-        $headers = array_merge($headers, ['Access-Control-Allow-Methods' => implode(',',array_map( function ($e){ return strtoupper($e); },$verbos)) ]);
+        // aditional headers
+
+        $headers = array_merge($headers, ['Access-Control-Allow-Methods' => implode(',',array_map( function ($e){ return strtoupper($e); },$this->callable )) ]);
         $this->setheaders($headers);
-        */
-
-        header('Access-Control-Allow-Credentials: True');
-        header('Access-Control-Allow-Headers: Origin,Content-Type,X-Auth-Token,AccountKey,X-requested-with,Authorization,Accept, Client-Security-Token,Host,Date,Cookie,Cookie2'); 
-        header('Access-Control-Allow-Methods: GET,POST,PUT,PATCH,POST,DELETE,OPTIONS'); 
-        header('Access-Control-Allow-Origin: *');
-        header('Content-Type: application/json; charset=UTF-8');
-
     }
 
     
@@ -128,8 +112,8 @@ class MySelf extends Controller
      * @return void
      */
     private function setheaders(array $headers = []) {
-        $headers = array_merge($this->default_headers, $headers);     
-
+       // $headers = array_merge($this->default_headers, $headers); 
+       
         foreach ($headers as $k => $val){
             if (empty($val))
                 continue;
@@ -172,6 +156,7 @@ class MySelf extends Controller
      * @return void
      */
     function options(){
+        // This function is bypassed in constructor
     }
 
     
@@ -183,7 +168,7 @@ class MySelf extends Controller
      * @return void
      */
     function get(){
-          try {
+        try {
             $conn = DB::getConnection();
 
             $model    = 'simplerest\\models\\'.$this->modelName;

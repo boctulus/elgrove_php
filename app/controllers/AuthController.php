@@ -20,10 +20,10 @@ class AuthController extends Controller implements IAuth
 {
     function __construct()
     { 
-        header('Access-Control-Allow-Credentials: True');
-        header('Access-Control-Allow-Headers: Origin,Content-Type,X-Auth-Token,AccountKey,X-requested-with,Authorization,Accept, Client-Security-Token,Host,Date,Cookie,Cookie2'); 
-        header('Access-Control-Allow-Methods: POST,OPTIONS'); 
+        header('Access-Control-Allow-Headers: Authorization,Content-Type'); 
         header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Methods: POST,OPTIONS'); ;
+        header('Access-Control-Allow-Credentials: True');
         header('Content-Type: application/json; charset=UTF-8');
 
         parent::__construct();
@@ -85,6 +85,9 @@ class AuthController extends Controller implements IAuth
             ->where([ 'email'=> $email, 'username' => $username ], 'OR')
             ->setValidator((new Validator())->setRequired(false))  
             ->first();
+
+            if ($row === false)
+                Factory::response()->sendError('There are no users!');
 
             $hash = $row['password'];
 
@@ -159,7 +162,7 @@ class AuthController extends Controller implements IAuth
         Access Token renewal
     */	
     function token()
-    {
+    {        
         if (!in_array($_SERVER['REQUEST_METHOD'], ['POST','OPTIONS']))
             Factory::response()->sendError('Incorrect verb ('.$_SERVER['REQUEST_METHOD'].'), expecting POST',405);
 
@@ -169,9 +172,10 @@ class AuthController extends Controller implements IAuth
         $auth = $headers['Authorization'] ?? $headers['authorization'] ?? null;
 
         if (empty($auth)){
-            Factory::response()->sendError('Authorization not found',400);
+            //Factory::response()->sendError('Authorization not found',400);
+            return;
         }
-
+           
         //print_r($auth);
 
         try {                                      

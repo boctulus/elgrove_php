@@ -11,7 +11,7 @@ class HomeController extends MyController
 	function index(){
 		
 		try {
-			$estado_db = DB::table('users')->get() ? 'OK' : 'en fallo';
+			$estado_db = DB::table('users')->get() !== false ? 'OK' : 'en fallo';
 		} catch (\Exception $e) {
 			$estado_db = $e->getMessage();
 		} finally {

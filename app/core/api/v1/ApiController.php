@@ -29,20 +29,17 @@ abstract class ApiController extends ResourceController
     protected $config;
     protected $modelName;
     protected $model_table;
-    protected $default_headers = [
-        'Access-Control-Allow-Methods' => 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-        'Access-Control-Allow-Credentials' => 'true',
-        'Access-Control-Allow-Headers' => 'AccountKey,x-requested-with, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Host, Date, Cookie, Cookie2',
-        'Content-Type' => 'application/json; charset=UTF-8',
-    ];
+    
 
     function __construct(array $headers = [], IAuth $auth_object = null) 
-    {        
-        //if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
-        //    return;
-        
+    {   
         parent::__construct();
 
+        header('Access-Control-Allow-Origin: *');    
+        header('Access-Control-Allow-Headers: Authorization,Content-Type'); 
+        header('Access-Control-Allow-Credentials: True');        
+        header('Content-Type: application/json; charset=UTF-8');
+        
         $this->config = include CONFIG_PATH . 'config.php';
 
         if ($this->config['debug_mode'] == false)
@@ -120,12 +117,10 @@ abstract class ApiController extends ResourceController
 
         $this->callable = array_merge($this->callable,['head','options']);
 
-        // headers
-        $verbos = array_merge($this->callable, ['options']);            
-        $headers = array_merge($headers, ['Access-Control-Allow-Methods' => implode(',',array_map( function ($e){ return strtoupper($e); },$verbos)) ]);
-        $this->setheaders($headers);            
-        
- 
+        // aditional headers
+
+        $headers = array_merge($headers, ['Access-Control-Allow-Methods' => implode(',',array_map( function ($e){ return strtoupper($e); },$this->callable )) ]);
+        $this->setheaders($headers);
     }
 
     static function get_owned(){
