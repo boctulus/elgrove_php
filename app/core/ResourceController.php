@@ -25,7 +25,7 @@ abstract class ResourceController extends Controller
         header('Content-Type: application/json; charset=UTF-8'); 
         
         if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-            return;
+            Factory::response()->sendOK(); // no tocar !
         }
 
         if (Factory::request()->header('Authorization') == NULL && Factory::request()->header('authorization') == NULL){
@@ -33,6 +33,9 @@ abstract class ResourceController extends Controller
             $this->is_admin = false;
             $this->roles = ['guest'];
         }
+
+        //var_dump(Factory::request()->headers());    
+        //var_dump($this->roles);
 
         $this->auth_payload = (new AuthController())->check();
             

@@ -189,7 +189,7 @@ Resultado:
 
 	SELECT AVG(cost), size FROM products WHERE deleted_at IS NULL GROUP BY size HAVING AVG(cost) >= 150
 
-El problema del método dd() es que no funciona si en su lugar había una función get() parametrizada o bien una función agregativa comon min(), max(), count(), sum() y avg() 
+El problema del método dd() es que no funciona si en su lugar había una función get() parametrizada -en vez de usar select()- o bien una función agregativa comon min(), max(), count(), sum() y avg() 
 
 Otra función de debug más general es DB::getQueryLog()
 

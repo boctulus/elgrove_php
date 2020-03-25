@@ -20,11 +20,11 @@ class UserRolesModel extends Model
 		'belongs_to' => 'INT',
 		'role_id' => 'INT',
 		'created_at'  => 'STR',
-		'modification_date'  => 'STR'
+		'updated_at'  => 'STR'
 	];
 
 	protected $rules = [
-		'role_id'	=> ['in' => [2,3,100], 'messages' => ['in' => 'Invalid role_id'] ] 
+		'role_id'	=> ['in' => [2,100], 'messages' => ['in' => 'Invalid role_id'] ] 
 	];
 
     function __construct($db = NULL){

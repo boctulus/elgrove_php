@@ -328,6 +328,8 @@ abstract class ApiController extends ResourceController
                     Factory::response()->sendError("You don't have permission for the folder $folder", 403);
             }
 
+            //var_dump($this->is_admin);
+
             if ($id != null)
             {
                 $_get = [
@@ -350,9 +352,12 @@ abstract class ApiController extends ResourceController
                     $_get[] = ['belongs_to', $f_rows[0]['belongs_to']];
                 }
 
-                $rows = $instance->where($_get)->get($fields); 
+                $rows = $instance->where($_get)->get($fields); ////////////////////////
+
+                //var_dump($rows);
+
                 if (empty($rows))
-                    Factory::response()->sendError('Not found', 404);
+                    Factory::response()->sendError('Not found', 404, $id != null ? "Registry with id=$id in table '{$this->model_table}' was not found" : '');
                 else
                     Factory::response()->send($rows[0]);
             }else{    

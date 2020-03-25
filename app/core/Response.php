@@ -15,7 +15,7 @@ class Response
     static protected $pretty;
     static protected $quit = true;
     static protected $paginator;
-    static protected $fake_status_codes = true; // send 200 instead
+    static protected $fake_status_codes = false; // send 200 instead
     static protected $options = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES;
 
 
