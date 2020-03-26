@@ -12,6 +12,7 @@ class PostsModel extends Model
 		'title' => 'STR',
 		'content' => 'STR',
 		'slug' => 'STR',
+		'enabled' => 'STR',
 		'created_at' => 'STR',
 		'updated_at' => 'STR',
 		'deleted_at' => 'STR'
@@ -21,7 +22,8 @@ class PostsModel extends Model
 
 	protected $rules = [
 		'title' 	=> ['min'=>3, 'max'=>80],
-		'slug' 	=> ['min'=>3, 'max'=>80]
+		'slug' 	=> ['min'=>3, 'max'=>80],
+		'enabled' => ['type' =>  'bool']
 	];
 
     function __construct($db = NULL){

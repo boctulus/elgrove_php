@@ -17,7 +17,7 @@ class ServicesModel extends Model
 		'deleted_at' => 'STR'
 	];
 
-	protected $nullable = [];
+	protected $nullable = ['enabled'];
 
 	protected $rules = [
 		'name' 	=> ['min'=>3, 'max'=>80],

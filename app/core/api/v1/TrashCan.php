@@ -139,7 +139,7 @@ class TrashCan extends MyApiController
                     $page_size = $limit;
                 }
 
-                $order  = Arrays::shift($_get,'order');
+                $order  = Arrays::shift($_get,'orderBy');
 
                 // Importante:
                 $_get = Arrays::nonassoc($_get);

@@ -219,6 +219,9 @@ abstract class ApiController extends ResourceController
     function get($id = null) {
         global $api_version;
 
+        //if (!in_array($_SERVER['REQUEST_METHOD'], ['GET','OPTIONS']))
+        //    Factory::response()->sendError('Incorrect verb ('.$_SERVER['REQUEST_METHOD'].'), expecting GET',405);
+
         try {            
 
             $conn = DB::getConnection();
@@ -277,8 +280,7 @@ abstract class ApiController extends ResourceController
                 
             $owned = static::get_owned() && $instance->inSchema(['belongs_to']);
 
-            // patch for Nginx
-            $_q      = Arrays::shift($_get,'q');
+            $_q      = Arrays::shift($_get,'q'); /* search */
             
             $fields  = Arrays::shift($_get,'fields');
             $fields  = $fields != NULL ? explode(',',$fields) : NULL;
@@ -405,7 +407,7 @@ abstract class ApiController extends ResourceController
                     $page_size = $limit;
                 }
 
-                $order  = Arrays::shift($_get,'order');
+                $order  = Arrays::shift($_get,'orderBy');
 
                 // Importante:
                 $_get = Arrays::nonassoc($_get);
@@ -606,7 +608,7 @@ abstract class ApiController extends ResourceController
 
                 // WHERE
                 $instance->where($_get);
-                //var_export($_get);
+                //var_export($_get);            /////////
 
                 // GROUP BY
                 if ($group_by != NULL){
