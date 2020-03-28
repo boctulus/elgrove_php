@@ -8,6 +8,7 @@ use simplerest\libs\Arrays;
 use simplerest\libs\Strings;
 use simplerest\libs\DB;
 use simplerest\libs\Debug;
+use simplerest\libs\Validator;
 use simplerest\core\exceptions\InvalidValidationException;
 use simplerest\libs\Url;
 
@@ -81,9 +82,6 @@ class Collections extends MyApiController
         if (empty($data))
             Factory::response()->sendError('Invalid JSON',400);
 
-        if (empty($data['entity']))
-            Factory::response()->sendError('Lacks entity',400);
-
         try {
             
             if (!empty($data['remove']) && strtolower($data['remove']) == 'true'){
@@ -93,7 +91,53 @@ class Collections extends MyApiController
                     Factory::response()->sendError("Colection not found",404);
                 }
             } else {
-                Factory::response()->send("Nothing to do");
+
+                $row  = DB::table('collections')->where(['id', $id])->first();
+            
+                if (!$row){
+                    Factory::response()->code(404)->sendError("Collection for id=$id does not exists");
+                }
+            
+                if (!$this->is_admin && $row['belongs_to'] != $this->uid){
+                    Factory::response()->sendError('Forbidden', 403, 'You are not the owner');
+                }         
+                                               
+                $entity = Strings::toCamelCase($row['entity']);    
+           
+                $modelName   = ucfirst($entity) . 'Model';
+                $model_table = strtolower($entity);
+
+                $model    = 'simplerest\\models\\'. $modelName;
+                $api_ctrl = '\simplerest\\controllers\\api\\' . ucfirst($entity);
+
+                if (!class_exists($model))
+                    Factory::response()->sendError("Entity $entity does not exists", 400);     
+
+                $conn = DB::getConnection();     
+                $instance = (new $model($conn));      
+
+                foreach ($data as $k => $v){
+                    if (strtoupper($v) == 'NULL' && $instance->isNullable($k)) 
+                        $data[$k] = NULL;
+                }
+    
+                $validado = (new Validator())->setRequired($put_mode)->validate($instance->getRules(), $data);
+                if ($validado !== true){
+                    Factory::response()->sendError('Data validation error', 400, $validado);
+                }   
+                
+                if ($instance->inSchema(['updated_by'])){
+                    $data['updated_by'] = $this->uid;
+                }                
+
+                $refs = json_decode($row['refs']);
+                $affected = 0;
+                DB::transaction(function() use ($instance, $refs, $id, $data, &$affected) {
+                    $affected = $instance->whereIn('id', $refs)->update($data);
+                    DB::table('collections')->where(['id' => $id])->delete(false);
+                });   
+                
+                Factory::response()->send(['affected_rows' => $affected]); 
             }
 
         } catch (\Exception $e) {

@@ -108,13 +108,9 @@ class Response
     } 
 
     function send($data, int $http_code = NULL){
-        $http_code = $http_code != NULL ? $http_code : static::$http_code;
-        
-        if ($http_code == NULL)
-          static::$http_code;
+        $http_code = $http_code != NULL ? $http_code : (static::$http_code !== null ? static::$http_code : 200);
 
-        if ($http_code != NULL && !static::$fake_status_codes)
-            header(trim('HTTP/'.static::$version.' '.$http_code.' '.static::$http_code_msg));
+        header(trim('HTTP/'.static::$version.' '.$http_code.' '.static::$http_code_msg));
         
         if (static::$as_object || is_object($data) || is_array($data)) {
             $arr = ['data' => $data, 
@@ -158,10 +154,9 @@ class Response
 
     // send as JSON
     function sendJson($data, int $http_code = NULL){
-        $http_code = $http_code != NULL ? $http_code : static::$http_code;
+        $http_code = $http_code != NULL ? $http_code : (static::$http_code !== null ? static::$http_code : 200);
         
-        if ($http_code != NULL && !static::$fake_status_codes)
-            header(trim('HTTP/'.static::$version.' '.$http_code.' '.static::$http_code_msg));
+        header(trim('HTTP/'.static::$version.' '.$http_code.' '.static::$http_code_msg));
        
         $res =  $this->encode([ 
                                 'data' => $data, 

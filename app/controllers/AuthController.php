@@ -87,7 +87,7 @@ class AuthController extends Controller implements IAuth
             ->first();
 
             if ($row === false)
-                Factory::response()->sendError('There are no users!');
+                Factory::response()->sendError('Not authorized', 401, 'User not found');
 
             $hash = $row['password'];
 
