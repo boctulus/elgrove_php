@@ -54,10 +54,11 @@ class FrontController
             // CamelCase to came_case
             $controller = implode('',array_map('ucfirst',explode('_',$controller)));
            
-            if ($controller == 'trash_can' || $controller == 'trashCan' || $controller == 'TrashCan')
+            if ($controller == 'trash_can' || $controller == 'trashCan' || $controller == 'TrashCan' || $controller == 'collections' || $controller == 'Collections'){
                 $namespace = 'simplerest\\core\\api\\'. $api_version . '\\';
-            else
+            }else{
                 $namespace = 'simplerest\\controllers\\api\\';
+            }    
 
             $class_name = $namespace . ucfirst($controller); //
   

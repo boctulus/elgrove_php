@@ -34,6 +34,8 @@ abstract class ResourceController extends Controller
             $this->roles = ['guest'];
         }
 
+        Factory::response()->asObject();
+
         //var_dump(Factory::request()->headers());    
         //var_dump($this->roles);
 

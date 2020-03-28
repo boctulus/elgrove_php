@@ -337,16 +337,16 @@ class AuthController extends Controller implements IAuth
                 $payload = \Firebase\JWT\JWT::decode($jwt, $this->config['access_token']['secret_key'], [ $this->config['access_token']['encryption'] ]);
                 
                 if (empty($payload))
-                    Factory::response()->sendError('Unauthorized!',401);                     
+                    Factory::response()->sendError('Unauthorized',401);                     
 
                 if (empty($payload->ip))
-                    Factory::response()->sendError('IP is needed',400);
+                    Factory::response()->sendError('Unauthorized',401,'Lacks IP in web token');
 
                 if ($payload->ip != $_SERVER['REMOTE_ADDR'])
                     Factory::response()->sendError('Unauthorized!',401, 'IP change'); 
 
                 if (empty($payload->uid))
-                    Factory::response()->sendError('uid is needed',400);                
+                    Factory::response()->sendError('Unauthorized',401,'Lacks id in web token');                
 
                 if (empty($payload->roles)){
                     $payload->roles = ['registered'];

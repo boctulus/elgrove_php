@@ -2607,8 +2607,69 @@ class DumbController extends Controller
             Debug::dd($id);
             //break;
         }
-        
-        
     }
-       
+
+    function insert_messages() {
+        function get_words($sentence, $count = 10) {
+            preg_match("/(?:\w+(?:\W+|$)){0,$count}/", $sentence, $matches);
+            return $matches[0];
+        }
+
+        $m = DB::table('messages');
+
+        for ($i=0; $i<1500; $i++){
+
+            $name = '';
+            for ($i=0;$i<10;$i++){
+                $name .= chr(rand(97,122));
+            }   
+            
+            $email = '';
+            for ($i=0;$i<20;$i++){
+                $email .= chr(rand(97,122));
+            }   
+
+            $email .= '@gmail.com';
+
+            $title = file_get_contents('http://loripsum.net/api/1/short/plaintext/short');
+            $title = get_words($title, 10);
+
+            $content = file_get_contents('http://loripsum.net/api/1/long/plaintext/short');
+
+            $phone = '0000000000';
+
+            $m->create([ 
+                        'name' => $name, 
+                        'email' => $email,
+                        'phone' => $phone,
+                        'subject' => $title,
+                        'content' => $content
+            ]);
+
+        }        
+    }
+    
+    // utiliza FPM, sin probar
+    function some_test() {
+       ignore_user_abort(true);
+       fastcgi_finish_request();
+
+       echo json_encode(['data' => 'Proceso terminado']);
+       header('Connection: close');
+
+       sleep(10);
+       file_put_contents('output.txt', date('l jS \of F Y h:i:s A')."\n", FILE_APPEND);
+    }
+
+    function json(){
+        DB::table('collections')->create([
+            'entity' => 'messages',
+            'refs' => json_encode([195,196]),
+            'belongs_to' => 332
+        ]);
+
+    }
+
+
+
 }

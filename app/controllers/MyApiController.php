@@ -18,10 +18,9 @@ class MyApiController extends ApiController
         
     // ACL   
     protected $scope = [
-        'guest'      => [],  
-        'registered' => [],
-        'basic'      => ['read'],
-        'regular'    => ['read', 'write']
+        'guest'         => [],  
+        'registered'    => [],
+        'copropietario' => []
     ];
 
     function __construct()

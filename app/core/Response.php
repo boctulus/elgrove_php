@@ -15,6 +15,7 @@ class Response
     static protected $pretty;
     static protected $quit = true;
     static protected $paginator;
+    static protected $as_object = false;
     static protected $fake_status_codes = false; // send 200 instead
     static protected $options = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES;
 
@@ -38,6 +39,10 @@ class Response
             exit;
         }else
             throw new \Exception("Headers already sent in in $filename on line $line. Unable to redirect to $url");
+    }
+
+    function asObject(bool $val = true){
+        static::$as_object = $val;
     }
 
     function addHeaders(array $headers)
@@ -111,7 +116,7 @@ class Response
         if ($http_code != NULL && !static::$fake_status_codes)
             header(trim('HTTP/'.static::$version.' '.$http_code.' '.static::$http_code_msg));
         
-        //if (is_array($data) || is_object($data)){
+        if (static::$as_object || is_object($data) || is_array($data)) {
             $arr = ['data' => $data, 
                     'status_code' => $http_code,
                     'error' => '', 
@@ -122,7 +127,7 @@ class Response
                 $arr['paginator'] = static::$paginator;
 
             $data = $this->encode($arr);
-        //}            
+        }            
 
         //if (Factory::request()->gzip() && strlen($data) > 1000){
         //    $this->addHeader('Content-Encoding: gzip');
