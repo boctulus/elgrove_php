@@ -73,7 +73,7 @@ return [
 	'pretty' => false,	
 	
 	'paginator' => ['max_limit' => 100,
-					'default_limit' => 10
+					'default_limit' => 50
 	],
 
 	'google_auth'  => [

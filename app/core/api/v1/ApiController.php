@@ -85,6 +85,9 @@ abstract class ApiController extends ResourceController
                     $this->callable = array_merge($this->callable, $operations['delete']); 
             }else{
                 foreach ($this->roles as $role){
+                    if (empty($role))
+                        continue;
+
                     if (isset($this->scope[$role])){
                         $cruds = $this->scope[$role];
         

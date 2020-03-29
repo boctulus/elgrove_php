@@ -12,9 +12,9 @@ class Messages extends MyApiController
 
     function __construct()
     {       
-        $this->scope['guest']      = [];
-        $this->scope['registered'] = [];
-        $this->scope['copropietario'] = [];
+        $this->scope['guest']      = ['create'];
+        $this->scope['registered'] = ['create'];
+        $this->scope['copropietario'] = ['create'];
         parent::__construct();
     }
 

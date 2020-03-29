@@ -48,8 +48,7 @@ class Collections extends MyApiController
             $api_ctrl = '\simplerest\\controllers\\api\\' . ucfirst($entity);
 
             if (!class_exists($model))
-                Factory::response()->sendError("Entity $entity does not exists", 400);
-            
+                Factory::response()->sendError("Entity $entity does not exists", 400);            
                       
             $id = DB::table('collections')->create([
                 'entity' => $model_table,

@@ -128,8 +128,8 @@ class Model {
 		}		
 	}
 
-	function registerInputMutator(string $field, callable $fn){
-		$this->input_mutators[$field] = $fn;
+	function registerInputMutator(string $field, callable $fn, bool $null_lock = false){
+		$this->input_mutators[$field] = [$fn, $null_lock];
 		return $this;
 	}
 
@@ -147,18 +147,19 @@ class Model {
 	}
 	
 	function applyInputMutator(array $data){	
-		foreach ($this->input_mutators as $field => $fn){
+		foreach ($this->input_mutators as $field => list($fn, $null_lock)){
 			if (!in_array($field, $this->getProperties()))
 				throw new \Exception("Invalid accesor: $field field is not present in " . $this->table_name); 
 
 			$dato = $data[$field] ?? NULL;
-			
-			/* 
-				Actualmente no aplico el input mutator si el dato es NULL
-			*/
-			if ($dato !== null){
-				$data[$field] = $this->input_mutators[$field]($dato);
-			}			
+					
+			if ($null_lock){
+				if ($dato !== null){
+					$data[$field] = $fn($dato);
+				}	
+			} else {
+				$data[$field] = $fn($dato);
+			}					
 		}
 
 		return $data;
