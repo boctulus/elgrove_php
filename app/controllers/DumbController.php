@@ -2670,6 +2670,10 @@ class DumbController extends Controller
 
     }
 
+    function test() {
+        $filename = uniqid(rand(), true);
+        var_dump([$filename, strlen($filename)]);
+    }
 
 
 }

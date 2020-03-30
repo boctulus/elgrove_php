@@ -5,6 +5,19 @@ namespace simplerest\libs;
 class Arrays 
 {
     /**
+     * Gets the first key of an array
+     *
+     * @param array $array
+     * @return mixed
+     */
+    static function array_key_first(array $arr) {
+        foreach($arr as $key => $unused) {
+            return $key;
+        }
+        return NULL;
+    }
+
+    /**
      * shift
      *
      * @param  array  $arr
@@ -37,13 +50,6 @@ class Arrays
         return $out;
     }
  
-    static function array_key_first(array $arr) {
-        foreach($arr as $key => $unused) {
-            return $key;
-        }
-        return NULL;
-    }
-
     static function is_assoc(array $arr)
     {
         foreach(array_keys($arr) as $key)
