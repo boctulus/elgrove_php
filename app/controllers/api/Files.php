@@ -19,12 +19,13 @@ class Files extends MyApiController
         $this->scope['guest']      = [];
         $this->scope['registered'] = [];
         $this->scope['copropietario'] = ['read'];
+        
         parent::__construct();
     }
 
     function post() {
 
-        $uploader = (new MultipleUploader('uploads'))
+        $uploader = (new MultipleUploader())
         ->setFileHandler(function($uid) {
             $prefix = ($uid ?? '0').'-';
             return uniqid($prefix, true);
@@ -58,7 +59,8 @@ class Files extends MyApiController
 
             $uploaded[] = [ 
                             'filename' => $filename_ori,
-                            'id' => $id
+                            'id' => $id,
+                            'link' => '/download/get/' . $id
             ];
         }
   

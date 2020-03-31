@@ -110,7 +110,7 @@ class FrontController
 
                 $method = !empty($action) ? $action : self::DEFAULT_ACTION;
         
-                $class_name = ucfirst($controller);
+                $class_name = $_class_name = ucfirst($controller);
                 $class_name = "${namespace}${folder}${class_name}Controller";
 
                 //Debug::dd($class_name, 'CLASS_NAME:');
@@ -134,7 +134,7 @@ class FrontController
 
 
         if (!class_exists($class_name))
-            Response::getInstance()->sendError("Internal error - controller class $class_name not loaded", 500);  
+            Response::getInstance()->sendError("Class not found", 404, "Internal error - controller class $_class_name (Controller) not found");  
 
         if (!method_exists($class_name, $method))
             Response::getInstance()->sendError("Internal error - method $method does not exist in $class_name", 500); 

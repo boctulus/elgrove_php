@@ -14,15 +14,21 @@ abstract class ResourceController extends Controller
     protected $roles;
     protected $uid;
     protected $is_admin;
+    protected $permissions = null;
     
+    protected $headers = [
+        'Access-Control-Allow-Headers' => 'Authorization,Content-Type', 
+        'Access-Control-Allow-Origin' => '*',
+        'Access-Control-Allow-Methods' => 'GET,POST,DELETE,PUT,PATCH,HEAD,OPTIONS',
+        'Access-Control-Allow-Credentials' => 'true',
+        'Content-Type' => 'application/json; charset=UTF-8'
+    ];
 
     function __construct()
     {       
-        header('Access-Control-Allow-Headers: Authorization,Content-Type'); 
-        header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Methods: GET,POST,DELETE,PUT,PATCH,HEAD,OPTIONS'); ;
-        header('Access-Control-Allow-Credentials: True');
-        header('Content-Type: application/json; charset=UTF-8'); 
+        foreach ($this->headers as $key => $header){
+            header("$key: $header");
+        } 
         
         if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
             Factory::response()->sendOK(); // no tocar !
@@ -40,6 +46,8 @@ abstract class ResourceController extends Controller
         //var_dump($this->roles);
 
         $this->auth_payload = (new AuthController())->check();
+
+        //var_dump($this->auth_payload);
             
         if (!empty($this->auth_payload)){
             $this->uid = $this->auth_payload->uid; 
@@ -75,10 +83,10 @@ abstract class ResourceController extends Controller
     protected function getRoles(){
         return $this->roles;
     }
-
+    
     protected function getPermissions(string $table = NULL){
         if ($table == NULL)
-            return $this->permissions->$table;
+            return $this->permissions;
 
         if (!isset($this->permissions->$table))
             return NULL;

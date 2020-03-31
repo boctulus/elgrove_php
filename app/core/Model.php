@@ -998,9 +998,10 @@ class Model {
 		$q = $this->toSql();
 		$st = $this->bind($q);
 	
-		if ($this->exec && $st->execute())
-			return $this->applyTransformer($this->applyOutputMutators($st->fetchAll($this->fetch_mode)));
-		else
+		if ($this->exec && $st->execute()) {
+			$res = $this->applyTransformer($this->applyOutputMutators($st->fetchAll($this->fetch_mode)));
+			return $res[0] ?? NULL;
+		} else
 			return false;	
 	}
 

@@ -37,14 +37,13 @@ class MultipleUploader
 {
 	protected $filenames  = [];
 	protected $settings	= [];
-	protected $location;
+	protected $location = UPLOADS_PATH;
 	protected $erroneous = [];
 	protected $renamerFn = null;
 	protected const WILDCARD = '*';
 	
 	
-	public function __construct($dist_folder = NULL){
-		$this->setLocation($dist_folder);
+	public function __construct(){
 	}	
 	
 	// @param string path (sin / al final)

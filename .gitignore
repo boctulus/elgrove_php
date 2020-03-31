@@ -10,4 +10,5 @@ user.txt
 DATOS.txt
 phpmyadmin/
 public/phpmyadmin/
+public/uploads/
 compile_i18n.bat
