@@ -129,11 +129,11 @@ class Files extends MyApiController
             $soft_delete = static::$soft_delete && $instance->inSchema(['deleted_at']);
 
             if (!$soft_delete) {
-                $path = 'uploads' . DIRECTORY_SEPARATOR . $row['filename_as_stored'];
+                $path = UPLOADS_PATH . $row['filename_as_stored'];
 
                 if (!file_exists($path)){
                     //var_dump($path);
-                    Factory::response()->sendError("File not found",404); 
+                    Factory::response()->sendError("File not found",404, $path); 
                 }
 
                 $ok = unlink($path);

@@ -13,13 +13,13 @@ class BillsModel extends Model
 		'detail' => 'STR',
 		'period' => 'STR', 
 		'amount' => 'STR',
-		'file' => 'STR',
+		'file_id' => 'INT',
 		'belongs_to' => 'INT',
 		'created_at' => 'STR',
 		'deleted_at' => 'STR'
 	];
 
-	protected $nullable = ['detail', 'period', 'file'];
+	protected $nullable = ['detail', 'period', 'file_id'];
 
 	protected $rules = [
 

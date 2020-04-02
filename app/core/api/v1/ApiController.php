@@ -122,8 +122,11 @@ abstract class ApiController extends ResourceController
 
         // aditional headers
 
-        //$headers = array_merge($headers, ['Access-Control-Allow-Methods' => implode(',',array_map( function ($e){   return strtoupper($e); },$this->callable )) ]);
-        //Factory::response()->sendHeaders(array_merge($this->default_headers, $headers));
+        /*
+        $headers = array_merge($headers, ['Access-Control-Allow-Methods' => implode(',',array_map( function ($e){   return strtoupper($e); },$this->callable )) ]);
+        
+        Factory::response()->sendHeaders(array_merge($this->default_headers, $headers));
+        */
     }
 
     static function get_owned(){

@@ -2671,7 +2671,7 @@ class DumbController extends Controller
     }
 
     function test() {
-        echo '<img src="http://elgrove.co/download/get/40" />';
+        echo '<img src="http://elgrove.co/download/get/44" />';
     }
 
 

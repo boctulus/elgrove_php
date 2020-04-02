@@ -15,7 +15,7 @@ class DownloadController extends ResourceController
 
     function __construct()
     {
-        $this->headers = [];
+        $this->headers['Access-Control-Allow-Methods'] = 'GET,OPTIONS';
 
         parent::__construct();
      
@@ -55,6 +55,8 @@ class DownloadController extends ResourceController
             header('Content-Length: ' . filesize($file));
             readfile($file);
             exit;
+        } else {
+            Factory::response()->sendError('File not found', 404, "$file not found in storage");
         }
     }
 }

@@ -22,7 +22,7 @@ class AuthController extends Controller implements IAuth
     { 
         header('Access-Control-Allow-Headers: Authorization,Content-Type'); 
         header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Methods: POST,OPTIONS'); ;
+        header('Access-Control-Allow-Methods: GET,POST,DELETE,PUT,PATCH,HEAD,OPTIONS'); ;
         header('Access-Control-Allow-Credentials: True');
         header('Content-Type: application/json; charset=UTF-8');
 
