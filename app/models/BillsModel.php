@@ -19,7 +19,7 @@ class BillsModel extends Model
 		'deleted_at' => 'STR'
 	];
 
-	protected $nullable = ['detail', 'period', 'file_id'];
+	protected $nullable = ['detail', 'period'];
 
 	protected $rules = [
 

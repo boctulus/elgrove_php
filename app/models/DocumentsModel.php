@@ -10,7 +10,7 @@ class DocumentsModel extends Model
 	protected $schema = [
 		'id' => 'INT',
 		'name' => 'STR',
-		'file' => 'STR',
+		'file_id' => 'INT',
 		'enabled' => 'INT',
 		'belongs_to' => 'INT',
 		'created_at' => 'STR',

@@ -870,7 +870,7 @@ Para eliminar *permanentemente* un recurso se realiza un DELETE sobre el element
 
 La papelera acepta los mismos filtros y los resultados se pueden ordenar igual que con cualquier entidad:
 
-	GET /api/v1/trash_can?entity=Products&orderBy[deleted_at]=DESC
+	GET /api/v1/trash_can?entity=Products&order[deleted_at]=DESC
 
 
 ### Convención de nombres 
@@ -963,7 +963,7 @@ Example:
 
 ### BETWEEN
 
-    GET /api/v1/products?orderBy[cost]=ASC&cost[between]=200,300
+    GET /api/v1/products?order[cost]=ASC&cost[between]=200,300
     GET /api/v1/products?created_at[between]=2019-10-15 00:00:00,2019-09-01 23:59:59
 
 ### List of fields to include
@@ -985,15 +985,15 @@ Example:
 
 ### ORDER BY
 
-    GET /api/v1/products?orderBy[cost]=DESC
-    GET /api/v1/products?orderBy[cost]=DESC&orderBy[name]=ASC
-    GET /api/v1/products?orderBy[cost]=ASC&orderBy[id]=DESC
+    GET /api/v1/products?order[cost]=DESC
+    GET /api/v1/products?order[cost]=DESC&order[name]=ASC
+    GET /api/v1/products?order[cost]=ASC&order[id]=DESC
 
 ### LIMIT
 
     GET /api/v1/products?limit=10
     GET /api/v1/products?offset=40&limit=10
-    GET /api/v1/products?limit=10&orderBy[name]=ASC&orderBy[cost]=DESC&size=2L
+    GET /api/v1/products?limit=10&order[name]=ASC&order[cost]=DESC&size=2L
 
 Pagination can be done with page and pageSize
 

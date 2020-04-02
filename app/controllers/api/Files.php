@@ -24,6 +24,7 @@ class Files extends MyApiController
     }
 
     function post() {
+        $data = $_POST;
 
         $uploader = (new MultipleUploader())
         ->setFileHandler(function($uid) {
@@ -46,7 +47,12 @@ class Files extends MyApiController
         foreach ($files as list($filename_ori, $filename_as_stored)){
             $instance = DB::table('files')->fill(['filename_as_stored']);
 
-            $belongs_to = !$this->isGuest() ? $this->uid : null;
+            if ($this->isAdmin()){
+                if (isset($data['belongs_to']))
+                    $belongs_to = $data['belongs_to'];
+            } else 
+                $belongs_to = !$this->isGuest() ? $this->uid : null;
+
             $file_ext = pathinfo($filename_ori, PATHINFO_EXTENSION);
 
             $id = $instance
