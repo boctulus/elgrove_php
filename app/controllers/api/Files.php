@@ -11,12 +11,12 @@ use simplerest\libs\Debug;
 class Files extends MyApiController
 { 
     //static protected $owned = false;
-    //static protected $guest_access = true;
+    static protected $guest_access = true;
     static protected $soft_delete = false;
 
     function __construct()
     {       
-        $this->scope['guest']      = [];
+        $this->scope['guest']      = ['read'];
         $this->scope['registered'] = [];
         $this->scope['copropietario'] = ['read'];
         
@@ -78,10 +78,6 @@ class Files extends MyApiController
     }
 
     function put ($id = null){
-        Factory::response()->sendError('Not implemented', 501);
-    }
-
-    function patch ($id = null){
         Factory::response()->sendError('Not implemented', 501);
     }
 

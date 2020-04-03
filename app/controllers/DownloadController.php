@@ -26,15 +26,32 @@ class DownloadController extends ResourceController
         }        
     }
 
-
     function get($id = null) {
         if ($id == null)
             return;
 
         $_get = [];    
         
-        if (!$this->is_admin && static::$owned)
-            $_get[] = ['belongs_to', $this->uid];
+        if (!$this->is_admin){
+            if ($this->isGuest()){
+                if (static::$guest_access){
+                    $instance = DB::table('files');
+                    
+                    if ($instance->inSchema(['guest_access'])){
+                        $_get[] = ['guest_access', 1];
+                    } else {
+                        // pasa
+                    }
+                } else {
+                    // 403
+                    Factory::response()->sendError("Unauthorized", 403, "Guests are not authorized to access this resource");
+                }                            
+            } else if (!$owned) {
+                // pasa
+            } else {
+                $_get[] = ['belongs_to', $this->uid];
+            }
+        }
 
         $_get[] =   ['id', $id];   
 

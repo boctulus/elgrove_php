@@ -13,6 +13,7 @@ class FilesModel extends Model
 		'file_ext' => 'STR',
 		'filename_as_stored' => 'STR',
 		'belongs_to' => 'INT',
+		'guest_access' => 'INT',
 		'locked' => 'INT',
 		'created_at' => 'STR',
 		'deleted_at' => 'STR',
@@ -24,6 +25,7 @@ class FilesModel extends Model
 	protected $rules = [
 		'filename'	=> ['max'=> 255],
 		'locked' 	=> ['type' => 'bool'],
+		'guest_access' 	=> ['type' => 'bool']
 	];
 
     function __construct($db = NULL){		

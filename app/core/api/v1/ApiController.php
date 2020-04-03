@@ -190,10 +190,12 @@ abstract class ApiController extends ResourceController
         $r = $rows[0]['r'] ?? null;
         $w = $rows[0]['w'] ?? null;
 
+        /*
         if ($this->isGuest()){
             $r = $r && $rows[0]['guest'];
             $w = $w && $rows[0]['guest'];
         }
+        */
 
         if (($operation == 'r' && $r) || ($operation == 'w' && $w)) {
             return true;
@@ -337,7 +339,7 @@ abstract class ApiController extends ResourceController
             }
 
             //var_dump($this->is_admin);
-
+        
             if ($id != null)
             {
                 $_get = [
@@ -346,9 +348,27 @@ abstract class ApiController extends ResourceController
 
                 if (empty($folder)){               
                     // root, by id
-                    if (!$this->is_admin && $owned)
-                        $_get[] = ['belongs_to', $this->uid];
-                }else{
+
+                    if (!$this->is_admin){
+                        if ($this->isGuest()){
+                            if (static::$guest_access){
+                                if ($instance->inSchema(['guest_access'])){
+                                    $_get[] = ['guest_access', 1];
+                                } else {
+                                    // pasa
+                                }
+                            } else {
+                                // 403
+                                Factory::response()->sendError("Unauthorized", 403, "Guests are not authorized to access this resource");
+                            }                            
+                        } else if (!$owned) {
+                            // pasa
+                        } else {
+                            $_get[] = ['belongs_to', $this->uid];
+                        }
+                    }
+                      
+                } else {
                     // folder, by id
                     if (empty(static::$folder_field))
                         Factory::response()->sendError("folder_field is undefined", 403);
@@ -553,9 +573,10 @@ abstract class ApiController extends ResourceController
                         if (!static::$guest_access){
                             Factory::response()->send([]);
                         }
-                    }else
+                    }else {
                         if (!$this->is_admin && $owned)
-                            $_get[] = ['belongs_to', $this->uid];        
+                            $_get[] = ['belongs_to', $this->uid];   
+                    }             
                 }else{
                     // folder, sin id
                     if (empty(static::$folder_field))
@@ -791,6 +812,10 @@ abstract class ApiController extends ResourceController
 
     } // 
     
+
+    /*
+        Usar una sola instancia !!!
+    */
     protected function modify($id = NULL, bool $put_mode = false)
     { 
         //Factory::response()->send("OK");
