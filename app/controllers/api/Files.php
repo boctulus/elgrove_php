@@ -43,15 +43,15 @@ class Files extends MyApiController
             ], 200);
         }        
         
-        $uploaded = [];
-        foreach ($files as list($filename_ori, $filename_as_stored)){
-            $instance = DB::table('files')->fill(['filename_as_stored']);
+        $instance = DB::table('files')->fill(['filename_as_stored']);
 
+        $uploaded = [];
+        foreach ($files as list($filename_ori, $filename_as_stored)){           
             if ($this->isAdmin()){
                 if (isset($data['belongs_to']))
-                    $belongs_to = $data['belongs_to'];
+                    $belongs_to = $data['belongs_to'];    
             } else 
-                $belongs_to = !$this->isGuest() ? $this->uid : null;
+                $belongs_to = !$this->isGuest() ? $this->uid : null;    
 
             $file_ext = pathinfo($filename_ori, PATHINFO_EXTENSION);
 
@@ -60,7 +60,8 @@ class Files extends MyApiController
                         'filename' => $filename_ori,  
                         'file_ext' => $file_ext,
                         'filename_as_stored' => $filename_as_stored,
-                        'belongs_to' => $belongs_to
+                        'belongs_to' => $belongs_to,
+                        'guest_access' => $data['guest_access'] ?? 0
             ]);
 
             $uploaded[] = [ 
