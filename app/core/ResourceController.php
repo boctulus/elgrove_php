@@ -6,7 +6,7 @@ use simplerest\core\ResourceController;
 use simplerest\core\Request;
 use simplerest\libs\Factory;
 use simplerest\models\RolesModel;
-use simplerest\controllers\AuthController;
+use simplerest\core\api\v1\AuthController;
 
 abstract class ResourceController extends Controller
 {

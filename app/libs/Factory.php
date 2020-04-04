@@ -12,7 +12,7 @@ class Factory {
 	}
 
 	static function check(){
-		$auth = new \simplerest\controllers\AuthController();
+		$auth = new \simplerest\core\api\v1\AuthController();
         return $auth->check();
 	}
 }

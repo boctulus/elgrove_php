@@ -54,26 +54,32 @@ class FrontController
             // CamelCase to came_case
             $controller = implode('',array_map('ucfirst',explode('_',$controller)));
            
-            if ($controller == 'trash_can' || $controller == 'trashCan' || $controller == 'TrashCan' || $controller == 'collections' || $controller == 'Collections'){
+            if ($controller == 'trash_can' || $controller == 'trashCan' || $controller == 'TrashCan' || $controller == 'collections' || $controller == 'Collections' || $controller == 'Auth') {
                 $namespace = 'simplerest\\core\\api\\'. $api_version . '\\';
             }else{
                 $namespace = 'simplerest\\controllers\\api\\';
             }    
 
             $class_name = $namespace . ucfirst($controller); //
-  
-            ///
-            $asked_method = NULL;
-            if ($config['method_override']['by_url']){
-                $asked_method  =  $req->shift('_method');
+
+            // AuthController
+            if ($controller == 'Auth'){
+                $class_name .= 'Controller';
+                $method = $_params[3];
+            }else {
+                ///
+                $asked_method = NULL;
+                if ($config['method_override']['by_url']){
+                    $asked_method  =  $req->shift('_method');
+                }
+
+                if ($asked_method == NULL && $config['method_override']['by_header']){
+                    $asked_method  =  $req->header('X-HTTP-Method-Override'); 
+                }
+
+                $method = $asked_method != NULL ? strtolower($asked_method) : strtolower($_SERVER['REQUEST_METHOD']);
             }
 
-            if ($asked_method == NULL && $config['method_override']['by_header']){
-                $asked_method  =  $req->header('X-HTTP-Method-Override'); 
-            }
-
-            $method = $asked_method != NULL ? strtolower($asked_method) : strtolower($_SERVER['REQUEST_METHOD']);
-            ///
         }else{
             //Debug::dd($_params, 'PARAMS:');
 
@@ -134,7 +140,7 @@ class FrontController
 
 
         if (!class_exists($class_name))
-            Response::getInstance()->sendError("Class not found", 404, "Internal error - controller class $_class_name (Controller) not found");  
+            Response::getInstance()->sendError("Class not found", 404, "Internal error - controller class $class_name not found");  
 
         if (!method_exists($class_name, $method))
             Response::getInstance()->sendError("Internal error - method $method does not exist in $class_name", 500); 
@@ -142,7 +148,7 @@ class FrontController
         $controller_obj = new $class_name();
 
         // Only for API Rest
-        if ($_params[0]=='api'){
+        if ($_params[0]=='api' && $controller != 'Auth'){
             if (!in_array($method, $controller_obj->getCallable())){
                 Response::getInstance()->sendError("Not authorized for $controller:$method", 403);
             }

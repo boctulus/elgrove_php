@@ -1,6 +1,6 @@
 <?php
 
-namespace simplerest\controllers;
+namespace simplerest\core\api\v1;
 
 use Exception;
 use simplerest\core\Controller;

@@ -30,7 +30,7 @@ class MySelf extends Controller
          
         $this->config = include CONFIG_PATH . 'config.php';
 
-        $auth_object = new \simplerest\controllers\AuthController();
+        $auth_object = new \simplerest\core\api\v1\AuthController();
 
         if ($this->config['debug_mode'] == false)
             set_exception_handler([$this, 'exception_handler']);
