@@ -60,7 +60,7 @@ class Files extends MyApiController
                         'filename' => $filename_ori,  
                         'file_ext' => $file_ext,
                         'filename_as_stored' => $filename_as_stored,
-                        'belongs_to' => $belongs_to,
+                        'belongs_to' => $belongs_to ?? NULL,
                         'guest_access' => $data['guest_access'] ?? 0
             ]);
 
