@@ -342,8 +342,8 @@ class AuthController extends Controller implements IAuth
                 if (empty($payload->ip))
                     Factory::response()->sendError('Unauthorized',401,'Lacks IP in web token');
 
-                if ($payload->ip != $_SERVER['REMOTE_ADDR'])
-                    Factory::response()->sendError('Unauthorized!',401, 'IP change'); 
+                //if ($payload->ip != $_SERVER['REMOTE_ADDR'])
+                //    Factory::response()->sendError('Unauthorized!',401, 'IP change'); 
 
                 if (empty($payload->uid))
                     Factory::response()->sendError('Unauthorized',401,'Lacks id in web token');                

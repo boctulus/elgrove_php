@@ -7,8 +7,8 @@ use simplerest\libs\Factory;
 
 class UsersModel extends Model
  { 
-	protected $table_name = "users";
-	protected $id_name = 'id';
+	//protected $table_name = "users";
+	//protected $id_name = 'id';
 	protected $not_fillable = ['confirmed_email', 'enabled'];
 	protected $nullable = ['enabled', 'email', 'confirmed_email'];
 	protected $hidden   = [	'password' ];
