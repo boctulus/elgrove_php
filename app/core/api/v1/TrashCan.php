@@ -299,7 +299,7 @@ class TrashCan extends MyApiController
                 if ($page +1 <= $page_count){
                     $query['page'] = ($page +1);
 
-                    $api_slug = $this->config['REMOVE_API_SLUG'] ? '/api' : 
+                    $api_slug = $this->config['REMOVE_API_SLUG'] ? '/api' : '';
                     $next =  Url::protocol() . '//' . $_SERVER['HTTP_HOST'] . $api_slug . '/' . $api_version . '/trashCan?entity=' . $this->model_table . '&' . $query = str_replace(['%5B', '%5D'], ['[', ']'], http_build_query($query));
                 }else{
                     $next = 'null';
