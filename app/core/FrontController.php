@@ -67,7 +67,7 @@ class FrontController
             // AuthController
             if ($controller == 'Auth'){
                 $class_name .= 'Controller';
-                $method = $_params[3];
+                $method = $_params[3 - $sub];
             }else {
                 ///
                 $asked_method = NULL;
