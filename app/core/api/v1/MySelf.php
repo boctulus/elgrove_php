@@ -15,7 +15,7 @@ use simplerest\core\exceptions\InvalidValidationException;
 
 class MySelf extends Controller 
 { 
-    protected $modelName = 'usersModel';
+    protected $modelName = 'UsersModel';
     
     function __construct(array $headers = []) 
     {   
