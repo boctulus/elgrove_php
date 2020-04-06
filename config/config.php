@@ -13,7 +13,7 @@ return [
 	/*
 		urls start with /api/ if REMOVE_API_SLUG is set to false
 	*/	 
-	'REMOVE_API_SLUG' => true,  
+	'REMOVE_API_SLUG' => false,  
 	'HTTPS' => 'Off',
 	'DEFAULT_CONTROLLER' => 'HomeController',
 
