@@ -9,7 +9,11 @@ return [
 	# For a sub-foder in /var/www/html just set as
 	# BASE_URL' => /folder/'
 	#
-	'BASE_URL' => '/',   
+	'BASE_URL' => '/',  
+	/*
+		urls start with /api/ if REMOVE_API_SLUG is set to false
+	*/	 
+	'REMOVE_API_SLUG' => true,  
 	'HTTPS' => 'Off',
 	'DEFAULT_CONTROLLER' => 'HomeController',
 

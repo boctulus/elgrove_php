@@ -17,6 +17,8 @@ class FrontController
 
         $config = include '../config/config.php';
 
+        $sub = (int) $config['REMOVE_API_SLUG'];
+  
         if (php_sapi_name() != 'cli'){
             $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
             $path = preg_replace('/(.*)\/index.php/', '/', $path);
@@ -36,21 +38,21 @@ class FrontController
             $_params = array_slice($argv, 1);
         }
         
-        $req = Request::getInstance();            
-    
-        if ($_params[0]=='api'){
-            if (!isset($_params[1]))
+        $req = Request::getInstance();  
+  
+        if ($_params[0]=='api' || $config['REMOVE_API_SLUG']){
+            if (!isset($_params[1 - $sub]))
                 Response::getInstance()->sendError('API version is missing');
 
-            if (!preg_match('/^v[0-9]+(\.+[0-9]+)?$/', $_params[1], $matches) )
+            if (!preg_match('/^v[0-9]+(\.+[0-9]+)?$/', $_params[1 - $sub], $matches) )
                 Response::getInstance()->sendError("Incorrect format for API version");
 
-            $api_version = $_params[1]; 
+            $api_version = $_params[1 - $sub]; 
             
-            $controller = $_params[2];
-            $params = array_slice($_params,3,2);
+            $controller = $_params[2 - $sub] ?? NULL;  
+            $params = array_slice($_params,3 - $sub,2);
             $req->setParams($params);    
-           
+        
             // CamelCase to came_case
             $controller = implode('',array_map('ucfirst',explode('_',$controller)));
            
