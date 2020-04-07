@@ -23,7 +23,7 @@ class ContactDataModel extends Model
 	];
 
 	protected $rules = [
-		'phone' => ['type' => 'regex:/^([0-9\-\(\) ]+)$/', 'messages' => [ 'type' => 'Utilice solo [0-9], espacios, guiones y paréntesis'] ],
+		'phone' => ['type' => 'regex:/^([0-9\-\(\)+ ]+)$/', 'messages' => [ 'type' => 'Utilice solo [0-9], espacios, guiones y paréntesis'] ],
 		'email' => ['type' => 'email', 'messages' => [ 'type' => 'Correo inválido'] ]
 	];
 
