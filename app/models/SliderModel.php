@@ -18,7 +18,7 @@ class SliderModel extends Model
 		'deleted_at' => 'STR'
 	];
 
-	protected $nullable = [];
+	protected $nullable = ['enabled'];
 
 	protected $rules = [
 		'line1' 	=> ['min'=>1, 'max'=>255],
