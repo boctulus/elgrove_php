@@ -18,12 +18,12 @@ class PostsModel extends Model
 		'deleted_at' => 'STR'
 	];
 
-	protected $nullable = [];
+	protected $nullable = ['enabled'];
 
 	protected $rules = [
 		'title' 	=> ['min'=>3, 'max'=>80],
-		'slug' 	=> ['min'=>3, 'max'=>80]
-		//'enabled' => ['type' =>  'bool']
+		'slug' 	=> ['min'=>3, 'max'=>80],
+		'enabled' => ['type' =>  'bool']
 	];
 
     function __construct($db = NULL){
