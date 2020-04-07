@@ -19,7 +19,7 @@ class ContactDataModel extends Model
 		'id' => 'INT',
 		'phone' => 'STR',
 		'email' => 'STR',
-		'address' => 'INT',
+		'address' => 'STR',
 	];
 
 	protected $rules = [
