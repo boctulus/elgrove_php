@@ -20,6 +20,7 @@ class ContactDataModel extends Model
 		'phone' => 'STR',
 		'email' => 'STR',
 		'address' => 'STR',
+		'opening_hours' => 'STR'
 	];
 
 	protected $rules = [
