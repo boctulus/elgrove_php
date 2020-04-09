@@ -46,7 +46,7 @@ class DownloadController extends ResourceController
                     // 403
                     Factory::response()->sendError("Unauthorized", 403, "Guests are not authorized to access this resource");
                 }                            
-            } else if (!$owned) {
+            } else if (!$this->owned) {
                 // pasa
             } else {
                 $_get[] = ['belongs_to', $this->uid];
