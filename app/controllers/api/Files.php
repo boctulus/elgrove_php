@@ -37,10 +37,7 @@ class Files extends MyApiController
         $failures = $uploader->getErrors();     
 
         if (count($files) == 0){
-            Factory::response()->send([
-                'uploaded' => [],
-                'failures' => $failures
-            ], 200);
+            Factory::response()->sendError('No files or file upload failed', 400);
         }        
         
         $instance = DB::table('files')->fill(['filename_as_stored']);
