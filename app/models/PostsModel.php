@@ -22,7 +22,7 @@ class PostsModel extends Model
 
 	protected $rules = [
 		'title' 	=> ['min'=>3, 'max'=>80],
-		'slug' 	=> ['min'=>3, 'max'=>80],
+		'slug' 	=> ['min'=>3, 'max'=>100],
 		'enabled' => ['type' =>  'bool']
 	];
 
