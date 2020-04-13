@@ -18,7 +18,7 @@ class AiQuestionsModel extends Model
 		'deleted_at' => 'STR'
 	];
 
-	protected $nullable = [];
+	protected $nullable = ['enabled'];
 
 	protected $rules = [
 		'enabled' => ['type' =>  'bool']	
