@@ -12,13 +12,14 @@ class AiQuestionsModel extends Model
 		'question' => 'STR',
 		'answer' => 'STR', 
 		'keywords' => 'STR',
+		'goto' => 'STR',
 		'enabled' => 'INT', 
 		'created_at' => 'STR',
 		'updated_at' => 'STR',
 		'deleted_at' => 'STR'
 	];
 
-	protected $nullable = ['enabled'];
+	protected $nullable = ['goto', 'enabled'];
 
 	protected $rules = [
 		'enabled' => ['type' =>  'bool']	
